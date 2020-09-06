@@ -3,7 +3,6 @@ Projet avionique testbench
 
 Spec :
 
-
     Architecture : ARM
     Processeur : RISC CORTEX M
     Jeu d'instructions : ARMv7-M (Cortex M4)
