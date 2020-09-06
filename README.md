@@ -4,22 +4,22 @@ Projet avionique testbench
 Spec :
 
 
-Architecture : ARM
+    Architecture : ARM
 
-Processeur : RISC CORTEX M
+    Processeur : RISC CORTEX M
 
-Jeu d'instructions : ARMv7-M (Cortex M4)
+    Jeu d'instructions : ARMv7-M (Cortex M4)
 
-Manufacturier : ST
+    Manufacturier : ST
 
-Carte de developpement : STM32F4DISCOVERY
+    Carte de developpement : STM32F4DISCOVERY
 
 
 Couche d'abstraction :
 
 
-1 - CMSIS
+    1 - CMSIS
 
-2 - FATFS
+    2 - FATFS
 
-3 - FREERTOS
+    3 - FREERTOS
