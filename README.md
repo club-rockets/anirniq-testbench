@@ -46,6 +46,6 @@ Fichier :
             |inc
             |src
     
- VERSION :
+ Version :
     
     debug 0 : 2020-09-06
