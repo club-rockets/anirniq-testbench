@@ -18,9 +18,13 @@ Couche d'abstraction :
    
 Fichier :
 
-    DRIVER
-        |CMSIS
-        |
+    drivers
+        |Pression
+        |LCD
+        |uart2
+        |spi1
+        |SD
+        |Loadcell
     app
     
     src
@@ -28,6 +32,19 @@ Fichier :
     middleware
         |freeRTOS
         |fatFS
+        
+    Utilities
+        |STM32F4-Discovery
+    
+    Libraries
+        |CMSIS
+            |Include
+        |Device
+            |STM32F4xx
+                |Include
+        |STM32F4xx_StdPeriph_Driver
+            |inc
+            |src
     
  VERSION :
     
