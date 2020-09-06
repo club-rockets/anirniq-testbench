@@ -15,3 +15,17 @@ Couche d'abstraction :
     1 - CMSIS
     2 - FATFS
     3 - FREERTOS
+   
+Fichier :
+
+    DRIVER
+        |CMSIS
+        |
+    app
+    
+    src
+    
+    middleware
+        |freeRTOS
+        |fatFS
+    
