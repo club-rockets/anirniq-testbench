@@ -1,7 +1,8 @@
 #ifndef _LCD_H_
 #define _LCD_H_
 
-#include "stm32f4xx_hal.h"
+#include <stdint.h>
+#include "stm32f4xx.h"
 
 typedef struct {
 	
@@ -13,7 +14,7 @@ typedef struct {
 	uint32_t gpioEnable;
 	uint8_t gpioIsConfigured = 0;
 	
-} lcd_gpio
+} lcd_gpio;
 
 typedef struct {
 
