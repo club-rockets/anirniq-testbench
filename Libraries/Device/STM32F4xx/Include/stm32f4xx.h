@@ -66,7 +66,7 @@
   */
 
 #if !defined (STM32F4XX) && !defined (STM32F40XX) && !defined (STM32F427X)
-  /* #define STM32F40XX */   /*!< STM32F40xx/41xx Devices */
+   #define STM32F40XX   /*!< STM32F40xx/41xx Devices */
   /* #define STM32F427X */   /*!< STM32F427x/437x Devices*/
 #endif
 
@@ -85,7 +85,7 @@
    In this case, these drivers will not be included and the application code will 
    be based on direct access to peripherals registers 
    */
-  /*#define USE_STDPERIPH_DRIVER */
+  #define USE_STDPERIPH_DRIVER
 #endif /* USE_STDPERIPH_DRIVER */
 
 /**
