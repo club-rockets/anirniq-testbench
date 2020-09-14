@@ -13,7 +13,7 @@ Couche d'abstraction :
 
     1 - CMSIS
     2 - FATFS
-    3 - FREERTOS
+    3 - FREERTOS (OUTDATED)
    
 Fichier :
 
@@ -138,4 +138,4 @@ Fichier :
     
  Version :
     
-    debug 0 : 2020-09-06
+    debug 0 : 2020-09-06 (master)
