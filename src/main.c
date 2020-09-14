@@ -90,9 +90,6 @@ int main(void)
 	spi2_init(); // init spi2 peripherical (to be implemented)
 	adc_init(); // init adc peripherical (to be implemented)
 
-	freeRTOS_init(); // init freeRTOS function (to be implemented)
-
-	osKernelStart(); //n Start scheduler (to be implemented)
 #endif
 
   /* Infinite loop */
