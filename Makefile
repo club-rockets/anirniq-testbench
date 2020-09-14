@@ -65,7 +65,6 @@ Utilities/STM32F4-Discovery/stm32f4_discovery.c \
 Utilities/STM32F4-Discovery/stm32f4_discovery_audio_codec.c \
 Utilities/STM32F4-Discovery/stm32f4_discovery_lis302dl.c \
 src/main.c \
-src/startup_stm32f40xx.s \
 src/stm32f4xx_it.c \
 src/syscalls.c \
 src/system_stm32f4xx.c \
@@ -78,7 +77,7 @@ src/tiny_printf.c
 
 # ASM sources
 ASM_SOURCES =  \
-startup_stm32f40xx.s
+src/startup_stm32f40xx.s
 
 #######################################
 # binaries
@@ -193,6 +192,8 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	
 $(BUILD_DIR):
 	mkdir $@		
+
+	@echo "Oh shit, here we go again"
 
 #######################################
 # clean up

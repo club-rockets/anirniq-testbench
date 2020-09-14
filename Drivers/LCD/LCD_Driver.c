@@ -1,4 +1,4 @@
-#include "lcd.h"
+#include "LCD_Driver.h"
 
 void lcd_init(lcd_struct_t* lcd){
 
