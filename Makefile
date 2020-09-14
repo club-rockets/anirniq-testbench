@@ -1,7 +1,7 @@
 # Makefile projet avionique-testbench
 # Version 0 : 12/09/2020
 # Nathan Roussel
-# nathan.roussel@ens.etsmtl.ca
+# nathan.roussel.1@ens.etsmtl.ca
 
 ######################################
 # target
@@ -192,14 +192,14 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	
 $(BUILD_DIR):
 	mkdir $@		
-
-	@echo "Oh shit, here we go again"
+	@echo "\033[0;35mOh shit, here we go again\033[0m"
 
 #######################################
 # clean up
 #######################################
 clean:
 	-rm -fR $(BUILD_DIR)
+	@echo "\033[0;32mClean as fuck\033[0m"
   
 #######################################
 # dependencies
