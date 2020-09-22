@@ -32,8 +32,9 @@ SOFTWARE.
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
 
-#define DEBUG
+#include "ADC_Driver.h"
 
+#define DEBUG
 /* Private macro */
 /* Private variables */
 /* Private function prototypes */
@@ -60,6 +61,10 @@ int main(void)
   *  E.g.  SCB->VTOR = 0x20000000;  
   */
 
+
+	uint32_t data = 0;
+
+
 #ifdef DEBUG
 
 	  /* Initialize LEDs */
@@ -69,10 +74,9 @@ int main(void)
 	  STM_EVAL_LEDInit(LED6);
 
 	  /* Turn on LEDs */
-	  STM_EVAL_LEDOn(LED3);
-	  STM_EVAL_LEDOn(LED4);
-	  STM_EVAL_LEDOn(LED5);
-	  STM_EVAL_LEDOn(LED6);
+	 // STM_EVAL_LEDOn(LED4); //green
+	  //STM_EVAL_LEDOn(LED5); //red
+	 // STM_EVAL_LEDOn(LED6); //blue
 
 #else
 	SystemCoreClockUpdate(); //update systemcore clock in case you use non-default settings
@@ -91,6 +95,25 @@ int main(void)
 	adc_init(); // init adc peripherical (to be implemented)
 
 #endif
+
+	/*RCC->CR |= (1<<16);
+	while(!((RCC->CR) & (1<<17)));
+	RCC->CFGR |= 0xA0;*/
+
+
+
+
+
+
+	SystemCoreClockUpdate();
+	//SystemInit();
+
+	adc_init();
+	adc_power(1);
+
+	adc_single_conversion(&data);
+
+	STM_EVAL_LEDOn(LED6); //blue
 
   /* Infinite loop */
   while (1)

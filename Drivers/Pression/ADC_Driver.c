@@ -9,43 +9,75 @@
 
 void adc_init(void){
 
-	/* PRESSURE 1 (P1) = ADC CHANNEL X, pin X, GPIO X
-	 * PRESSURE 2 (P2) = ADC CHANNEL X, pin X, GPIO X
-	 * PRESSURE 3 (P3) = ADC CHANNEL X, pin X, GPIO X
-	 *
+	/* ************ NOT CODE ************
+	 * PRESSURE 1 (P1) = ADC CHANNEL 1, pin A5, GPIO A, pin number 30
+	 * PRESSURE 2 (P2) = ADC CHANNEL 1, pin A6, GPIO A, pin number 31
+	 * PRESSURE 3 (P3) = ADC CHANNEL 1, pin A7, GPIO A, pin number 32
 	 * See ADC_Driver.h for correct define value */
 
-	RCC->APB2ENR |= P1_ADC_CLK | P2_ADC_CLK | P3_ADC_CLK; //Enable ADC clock
-
+	RCC->APB2ENR |= ADC1_EN; //Enable ADC clock
 	RCC->AHB1ENR |= P1_GPIO_CLK | P2_GPIO_CLK | P3_GPIO_CLK; //Enable GPIO clock
 
 	P1_GPIO_PORT->MODER |= P1_GPIO_ANALOG | P2_GPIO_ANALOG | P3_GPIO_ANALOG; //Configure GPIO to analog input
+	P1_GPIO_PORT->PUPDR |= P1_GPIO_NO_PULL | P2_GPIO_NO_PULL | P3_GPIO_NO_PULL; //No pull mode
+
+	RCC->CFGR |= ADC_DIV_2_PRESCALER; //Prescaler division by 2
 
 	P_ADC->CR1 |= RESOLUTION; // Set the resolution of the ADC to 12 bits
 
-	P_ADC->SMPR1 |= P1_SAMPLE | P2_SAMPLE | P3_SAMPLE; // Set the sample time to 3 cycles
+	P_ADC->SMPR2 |= P1_SAMPLE | P2_SAMPLE | P3_SAMPLE; // Set the sample time to 3 cycles
 
 }
 
-void adc_conversion(uint32_t *adcDR){
+void adc_multi_conversion(uint32_t *adcDR){
 
 
 	/* ADC CONFIGURATION */
 
 	/* LECTURE */
 
-	while((ADC->CSR & P1_EOC_MASK) == 0);
+	/*while((P_ADC->CSR & P1_EOC_MASK) == 0);
 
 	adcDR[0] = P_ADC->DR;
 
-	while((ADC->CSR & P2_EOC_MASK) == 0);
+	while((P_ADC->CSR & P2_EOC_MASK) == 0);
 
 	adcDR[1] = P_ADC->DR;
 
-	while((ADC->CSR & P2_EOC_MASK) == 0);
+	while((P_ADC->CSR & P2_EOC_MASK) == 0);
 
-	adcDR[2] = P_ADC->DR;
+	adcDR[2] = P_ADC->DR;*/
 
+}
+
+void adc_single_conversion(uint32_t *data){
+
+
+	P_ADC->SQR1 |= SINGLE_CONVERSION; //Select the conversion mode
+
+	P_ADC->SQR3 |= (P1_CHANNEL << 0); //Select the channel
+
+	P_ADC->CR2 |= START_CONVERSION; //Start the conversion
+
+	while((P_ADC->SR & ADC_EOC_MASK) == 0);
+
+	*data = P_ADC->DR;
+
+}
+
+void adc_calibration(void){}
+
+void adc_power(uint32_t val){
+
+	if(val){
+
+		P_ADC->CR2 |= ADC_POWER_UP; //Power up ADC
+
+	}else if(!val){
+
+		P_ADC->CR2 &= ~ADC_POWER_UP; //Power down ADC
+
+	}
 
 }
 
