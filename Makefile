@@ -8,6 +8,10 @@
 ######################################
 TARGET = avionique-testbench
 
+######################################
+# St-link path
+######################################
+STLINK = /home/Zhogo/stlink.git
 
 ######################################
 # building variables
@@ -68,9 +72,9 @@ src/main.c \
 src/stm32f4xx_it.c \
 src/syscalls.c \
 src/system_stm32f4xx.c \
-src/tiny_printf.c
-#Drivers/LCD/LCD_Driver.c
-#Drivers/Pression/ADC_Driver.c
+src/tiny_printf.c \
+Drivers/Thermo/SPI_driver.c \
+Drivers/Thermo/thermo_API.c
 #Drivers/RFD900/uart2.c
 #Drivers/SD/fatfs_sd.c
 #Drivers/loadcell/HX711.c
@@ -132,6 +136,7 @@ C_INCLUDES =  \
 -ILibraries/CMSIS/Include \
 -ILibraries/Device/STM32F4xx/Include \
 -IUtilities/STM32F4-Discovery \
+-IDrivers/Thermo \
 -Isrc
 
 
@@ -200,6 +205,10 @@ $(BUILD_DIR):
 clean:
 	-rm -fR $(BUILD_DIR)
 	@echo "\033[0;32mClean as fuck\033[0m"
+
+# Flash the STM32F4
+burn:
+	$(STLINK)/st-flash write $(TARGET).bin 0x8000000
   
 #######################################
 # dependencies
