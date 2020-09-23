@@ -62,7 +62,8 @@ int main(void)
   */
 
 
-	uint32_t data = 0;
+	uint16_t data[3] = {0,0,0};
+	//uint32_t single = 0;
 
 
 #ifdef DEBUG
@@ -100,18 +101,15 @@ int main(void)
 	while(!((RCC->CR) & (1<<17)));
 	RCC->CFGR |= 0xA0;*/
 
-
-
-
-
-
 	SystemCoreClockUpdate();
 	//SystemInit();
 
 	adc_init();
 	adc_power(1);
 
-	adc_single_conversion(&data);
+	//adc_single_conversion(&single);
+	init_adc_dma((uint32_t) &data[0]);
+	adc_multi_conversion();
 
 	STM_EVAL_LEDOn(LED6); //blue
 

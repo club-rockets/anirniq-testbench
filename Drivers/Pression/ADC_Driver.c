@@ -23,37 +23,48 @@ void adc_init(void){
 
 	RCC->CFGR |= ADC_DIV_2_PRESCALER; //Prescaler division by 2
 
-	P_ADC->CR1 |= RESOLUTION; // Set the resolution of the ADC to 12 bits
+	P_ADC->CR1 |= RESOLUTION | (1<<8); // Set the resolution of the ADC to 12 bits
+	P_ADC->CR2 |= (1<<9) | (1<<8);
 
 	P_ADC->SMPR2 |= P1_SAMPLE | P2_SAMPLE | P3_SAMPLE; // Set the sample time to 3 cycles
 
 }
 
-void adc_multi_conversion(uint32_t *adcDR){
+void adc_multi_conversion(void){
 
 
 	/* ADC CONFIGURATION */
+	P_ADC->SQR1 |= MULTIPLE_CONVERSION; //Select the conversion mode
 
-	/* LECTURE */
+	P_ADC->SQR3 |= (P1_CHANNEL << 0) | (P2_CHANNEL << 5) | (P3_CHANNEL << 10); //Select the channel
 
-	/*while((P_ADC->CSR & P1_EOC_MASK) == 0);
+	P_ADC->CR2 |= START_CONVERSION; //Start the conversion
 
-	adcDR[0] = P_ADC->DR;
+}
 
-	while((P_ADC->CSR & P2_EOC_MASK) == 0);
+void init_adc_dma(uint32_t data_adr){
 
-	adcDR[1] = P_ADC->DR;
+	RCC->AHB1ENR |= (1<<22);
 
-	while((P_ADC->CSR & P2_EOC_MASK) == 0);
+	DMA2_Stream0->CR &= (0b000<<25);
+	DMA2_Stream0->CR &= (0b00<<23);
+	DMA2_Stream0->CR &=(0b00<<21);
+	DMA2_Stream0->CR |= (0b10<<16) | (1<<13) | (1<<11) | (1<<10) | (1<<8);
+	DMA2_Stream0->CR |= (0<<9);
+	DMA2_Stream0->CR |= (0b00<<6);
+	DMA2_Stream0->NDTR = 3;
+	DMA2_Stream0->PAR = (uint32_t) &P_ADC->DR;
+	DMA2_Stream0->M0AR = data_adr;
+	DMA2_Stream0->FCR = 0x00000021;
 
-	adcDR[2] = P_ADC->DR;*/
+	DMA2_Stream0->CR |= (1<<0);
 
 }
 
 void adc_single_conversion(uint32_t *data){
 
 
-	P_ADC->SQR1 |= SINGLE_CONVERSION; //Select the conversion mode
+	P_ADC->SQR1 &= (0x0<<20); //Select the conversion mode
 
 	P_ADC->SQR3 |= (P1_CHANNEL << 0); //Select the channel
 

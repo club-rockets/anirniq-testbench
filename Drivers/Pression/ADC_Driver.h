@@ -47,7 +47,8 @@
 
 #define MULTI_CHANNEL 0
 #define SINGLE_CHANNEL 0
-#define SINGLE_CONVERSION (1<<8)
+#define SINGLE_CONVERSION (0x0<<20)
+#define MULTIPLE_CONVERSION (0x2<<20)
 #define RESOLUTION (0x0<<24)
 #define P1_SAMPLE (0x0<<15)
 #define P2_SAMPLE (0x0<<18)
@@ -58,9 +59,10 @@
 //Prototype
 void adc_init(void);
 void adc_power(uint32_t val);
-void adc_conversion(uint32_t *adcDR);
 float adc_pressureConvert(uint32_t adcval);
 void adc_single_conversion(uint32_t *data);
+void adc_multi_conversion(void);
 void adc_calibration(void);
+void init_adc_dma(uint32_t data_adr);
 
 #endif /* PRESSION_ADC_DRIVER_H_ */
