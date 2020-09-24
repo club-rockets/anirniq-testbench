@@ -33,7 +33,7 @@ void temp(const uint8_t * rxBuffer, long * data, double * temperature){
 	}else{
 		*data = *data >> 13;
 		//Celsius
-		*temperature = (double) *data * 0.0078125;
+		*temperature = (double) *data * API_DRIVER_CONST;
 	}
     
 }

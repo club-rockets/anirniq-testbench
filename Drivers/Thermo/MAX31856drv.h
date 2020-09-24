@@ -1,5 +1,5 @@
 
- *  ------------------------------------------------------------------------- */
+ /*  ------------------------------------------------------------------------- */
 /*
  * Copyright (C) 2012 Maxim Integrated Products, Inc., All Rights Reserved.
  *
@@ -68,7 +68,7 @@
  extern "C" {
 #endif
 
-#include "stm32_spi.h"
+#include "SPI_driver.h"
 
 #define   Cold_Junction_Resolution    0.015625
 #define   TC_Resolution               0.0078125   
