@@ -12,27 +12,33 @@
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
 
-/* GPIO DEFINE */
+/* ADC CONFIGURATION START */
 
-#define P1_GPIO_PORT GPIOA
-#define P2_GPIO_PORT GPIOA
-#define P3_GPIO_PORT GPIOA
+#define P1_GPIO_PORT GPIOC
+#define P2_GPIO_PORT GPIOC
+#define P3_GPIO_PORT GPIOC
 
-#define P1_GPIO_CLK (1<<0)
-#define P2_GPIO_CLK (1<<0)
-#define P3_GPIO_CLK (1<<0)
+#define P1_CHANNEL 1
+#define P2_CHANNEL 2
+#define P3_CHANNEL 3
 
-#define P1_GPIO_NO_PULL (0x0<<10)
-#define P2_GPIO_NO_PULL (0x0<<12)
-#define P3_GPIO_NO_PULL (0x0<<14)
+#define P1_ADC_IN 11
+#define P2_ADC_IN 12
+#define P3_ADC_IN 13
 
-#define P1_CHANNEL 5
-#define P2_CHANNEL 6
-#define P3_CHANNEL 7
+#define P1_GPIO_CLK (1<<2)
+#define P2_GPIO_CLK (1<<2)
+#define P3_GPIO_CLK (1<<2)
 
-#define P1_GPIO_ANALOG (0x3<<10)
-#define P2_GPIO_ANALOG (0x3<<12)
-#define P3_GPIO_ANALOG (0x3<<14)
+/* ADC PIN CONFIGURATION END */
+
+#define P1_GPIO_NO_PULL (0x0<<(P1_CHANNEL*2))
+#define P2_GPIO_NO_PULL (0x0<<(P2_CHANNEL*2))
+#define P3_GPIO_NO_PULL (0x0<<(P3_CHANNEL*2))
+
+#define P1_GPIO_ANALOG (0x3<<(P1_CHANNEL*2))
+#define P2_GPIO_ANALOG (0x3<<(P2_CHANNEL*2))
+#define P3_GPIO_ANALOG (0x3<<(P3_CHANNEL*2))
 
 /* ADC DEFINE */
 
@@ -50,9 +56,9 @@
 #define SINGLE_CONVERSION (0x0<<20)
 #define MULTIPLE_CONVERSION (0x2<<20)
 #define RESOLUTION (0x0<<24)
-#define P1_SAMPLE (0x0<<15)
-#define P2_SAMPLE (0x0<<18)
-#define P3_SAMPLE (0x0<<21)
+#define P1_SAMPLE (0x0<<(P1_CHANNEL*3))
+#define P2_SAMPLE (0x0<<(P2_CHANNEL*3))
+#define P3_SAMPLE (0x0<<(P3_CHANNEL*3))
 
 #define START_CONVERSION (1<<30)
 

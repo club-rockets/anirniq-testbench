@@ -26,7 +26,7 @@ void adc_init(void){
 	P_ADC->CR1 |= RESOLUTION | (1<<8); // Set the resolution of the ADC to 12 bits
 	P_ADC->CR2 |= (1<<9) | (1<<8);
 
-	P_ADC->SMPR2 |= P1_SAMPLE | P2_SAMPLE | P3_SAMPLE; // Set the sample time to 3 cycles
+	//P_ADC->SMPR2 |= P1_SAMPLE | P2_SAMPLE | P3_SAMPLE; // Set the sample time to 3 cycles
 
 }
 
@@ -36,7 +36,7 @@ void adc_multi_conversion(void){
 	/* ADC CONFIGURATION */
 	P_ADC->SQR1 |= MULTIPLE_CONVERSION; //Select the conversion mode
 
-	P_ADC->SQR3 |= (P1_CHANNEL << 0) | (P2_CHANNEL << 5) | (P3_CHANNEL << 10); //Select the channel
+	P_ADC->SQR3 |= (P1_ADC_IN << 0) | (P2_ADC_IN << 5) | (P3_ADC_IN << 10); //Select the channel
 
 	P_ADC->CR2 |= START_CONVERSION; //Start the conversion
 
