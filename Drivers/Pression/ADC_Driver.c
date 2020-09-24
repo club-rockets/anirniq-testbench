@@ -10,9 +10,9 @@
 void adc_init(void){
 
 	/* ************ NOT CODE ************
-	 * PRESSURE 1 (P1) = ADC CHANNEL 1, pin A5, GPIO A, pin number 30
-	 * PRESSURE 2 (P2) = ADC CHANNEL 1, pin A6, GPIO A, pin number 31
-	 * PRESSURE 3 (P3) = ADC CHANNEL 1, pin A7, GPIO A, pin number 32
+	 * PRESSURE 1 (P1) = ADC CHANNEL 1, pin C1, GPIO C, pin number 30
+	 * PRESSURE 2 (P2) = ADC CHANNEL 1, pin C2, GPIO C, pin number 31
+	 * PRESSURE 3 (P3) = ADC CHANNEL 1, pin C3, GPIO C, pin number 32
 	 * See ADC_Driver.h for correct define value */
 
 	RCC->APB2ENR |= ADC1_EN; //Enable ADC clock
@@ -44,20 +44,20 @@ void adc_multi_conversion(void){
 
 void init_adc_dma(uint32_t data_adr){
 
-	RCC->AHB1ENR |= (1<<22);
+	RCC->AHB1ENR |= (1<<22); //Enable DMA2 clk
 
-	DMA2_Stream0->CR &= (0b000<<25);
-	DMA2_Stream0->CR &= (0b00<<23);
-	DMA2_Stream0->CR &=(0b00<<21);
+	DMA2_Stream0->CR &= (0b000<<25); // Select channel 0
+	DMA2_Stream0->CR &= (0b00<<23); //Memory bust single
+	DMA2_Stream0->CR &=(0b00<<21); //Peripheral bust single
 	DMA2_Stream0->CR |= (0b10<<16) | (1<<13) | (1<<11) | (1<<10) | (1<<8);
 	DMA2_Stream0->CR |= (0<<9);
 	DMA2_Stream0->CR |= (0b00<<6);
-	DMA2_Stream0->NDTR = 3;
-	DMA2_Stream0->PAR = (uint32_t) &P_ADC->DR;
-	DMA2_Stream0->M0AR = data_adr;
-	DMA2_Stream0->FCR = 0x00000021;
+	DMA2_Stream0->NDTR = 3; /*Number of data items*/
+	DMA2_Stream0->PAR = (uint32_t) &P_ADC->DR; /*Peripheral base address*/
+	DMA2_Stream0->M0AR = data_adr; //memory base 0 address
+	DMA2_Stream0->FCR = 0x00000021; //Direct mode and Threshold half full
 
-	DMA2_Stream0->CR |= (1<<0);
+	DMA2_Stream0->CR |= (1<<0); //Enable DMA2 Stream 0
 
 }
 
