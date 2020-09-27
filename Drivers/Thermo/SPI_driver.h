@@ -22,6 +22,7 @@
 
 void spi_initial(void);
 void spi_dma_init(void);
+void spi_send(uint8_t data);
 
 //From MAXIM INT
 uint8_t SPI_Write(uint8_t *buffer, uint8_t nBytes);

@@ -31,6 +31,8 @@ SOFTWARE.
 #include <stdio.h>
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
+#include "SPI_driver.h"
+#include "stm32f4xx.h"
 
 #define DEBUG
 
@@ -62,7 +64,9 @@ int main(void)
 
 #ifdef DEBUG
 
-	  /* Initialize LEDs */
+	uint8_t data = 0x0F;
+
+	/* Initialize LEDs */
 	  STM_EVAL_LEDInit(LED3);
 	  STM_EVAL_LEDInit(LED4);
 	  STM_EVAL_LEDInit(LED5);
@@ -72,7 +76,7 @@ int main(void)
 	  STM_EVAL_LEDOn(LED3);
 	  STM_EVAL_LEDOn(LED4);
 	  STM_EVAL_LEDOn(LED5);
-	  STM_EVAL_LEDOn(LED6);
+
 
 #else
 	SystemCoreClockUpdate(); //update systemcore clock in case you use non-default settings
@@ -91,6 +95,13 @@ int main(void)
 	adc_init(); // init adc peripherical (to be implemented)
 
 #endif
+
+	SystemCoreClockUpdate();
+	spi_initial();
+
+	spi_send(data);
+
+	STM_EVAL_LEDOn(LED6);
 
   /* Infinite loop */
   while (1)
