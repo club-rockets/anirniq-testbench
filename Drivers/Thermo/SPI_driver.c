@@ -51,8 +51,34 @@ uint8_t SPI_WriteByte(uint8_t data){
 	T_SPI->DR = (uint16_t)data; //Send data to TX buffer
 	while((T_SPI->SR & SPI_SR_RXNE) != SPI_SR_RXNE);//Check if RX buffer is full
 	data = (uint8_t)T_SPI->DR;
+
 	return 0;
 
+}
+
+uint8_t SPI_ReadByte(void){
+
+	while((T_SPI->SR & SPI_SR_TXE) != SPI_SR_TXE); //Check if TX buffer empty
+	T_SPI->DR = 0xff; //Send data to TX buffer (dummy value)
+	while((T_SPI->SR & SPI_SR_RXNE) != SPI_SR_RXNE);//Check if RX buffer is full
+
+	return (uint8_t)T_SPI->DR;
+
+}
+
+uint8_t SPI_Write(uint8_t *buffer, uint8_t nBytes){
+
+	uint8_t i;
+	for(i=0;i<nBytes;i++){
+
+		while((T_SPI->SR & SPI_SR_TXE) != SPI_SR_TXE); //Check if TX buffer empty
+		T_SPI->DR = (uint16_t)buffer[i];
+		while((T_SPI->SR & SPI_SR_RXNE) != SPI_SR_RXNE);//Check if RX buffer is full
+		buffer[i] = (uint8_t)T_SPI->DR;
+
+	}
+
+	return 0;
 }
 
 
@@ -67,10 +93,7 @@ uint8_t SPI_Read(uint8_t *buffer, uint8_t nBytes){
 		  while((T_SPI->SR & SPI_SR_RXNE) != SPI_SR_RXNE);//Check if RX buffer is full
 		  buffer[i] = (uint8_t)T_SPI->DR;
 
-
 	  }
 
-return 0;
+	  return 0;
 }
-
-

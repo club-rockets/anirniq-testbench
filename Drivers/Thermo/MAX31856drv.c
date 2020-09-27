@@ -70,29 +70,29 @@ uint8_t uch_cr0,uch_cr1,uch_mask;
 
 void maxim_31856_write_register(uint8_t uch_register_address, uint8_t uch_register_value)
 {
-  //SPI_CS_LOW;
+  SPI_CS_LOW;
   SPI_WriteByte(uch_register_address);
   SPI_WriteByte(uch_register_value);
-  //SPI_CS_HIGH; 
+  SPI_CS_HIGH;
 }
 
 uint8_t maxim_31856_read_register(uint8_t uch_register_address)
 {
   uint8_t uch_register_data;
   
-  //SPI_CS_LOW;
+  SPI_CS_LOW;
   SPI_WriteByte(uch_register_address);
   uch_register_data=SPI_ReadByte();
-  //SPI_CS_HIGH;
+  SPI_CS_HIGH;
   return (uch_register_data);
   
 }
 void maxim_31856_read_nregisters(uint8_t uch_register_address, uint8_t *uch_buff,uint8_t uch_nBytes)
 {
- //SPI_CS_LOW;
+ SPI_CS_LOW;
  SPI_WriteByte(uch_register_address);
  SPI_Read(uch_buff,uch_nBytes);
- //SPI_CS_HIGH;
+ SPI_CS_HIGH;
 }
 
 void maxim_31856_init(void)

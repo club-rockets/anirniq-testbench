@@ -74,7 +74,8 @@ src/syscalls.c \
 src/system_stm32f4xx.c \
 src/tiny_printf.c \
 Drivers/Thermo/SPI_driver.c \
-Drivers/Thermo/thermo_API.c
+Drivers/Thermo/thermo_API.c \
+Driver/Thermo/MAX31856drv.c
 #Drivers/RFD900/uart2.c
 #Drivers/SD/fatfs_sd.c
 #Drivers/loadcell/HX711.c

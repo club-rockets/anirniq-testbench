@@ -31,7 +31,7 @@ SOFTWARE.
 #include <stdio.h>
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
-#include "SPI_driver.h"
+#include "MAX31856drv.h"
 #include "stm32f4xx.h"
 
 #define DEBUG
@@ -64,9 +64,7 @@ int main(void)
 
 #ifdef DEBUG
 
-	uint8_t data;
-
-	uint8_t buffer[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	uint8_t buffer[16];
 
 	/* Initialize LEDs */
 	  STM_EVAL_LEDInit(LED3);
@@ -79,38 +77,25 @@ int main(void)
 	  STM_EVAL_LEDOn(LED4);
 	  STM_EVAL_LEDOn(LED5);
 
+		SystemCoreClockUpdate();
+		spi_initial();
+
+		maxim_31856_init(); //From m31856 driver
+
+		maxim_31856_read_nregisters(0x00,buffer,16); //Test if it works
+
+		STM_EVAL_LEDOn(LED6);
+
+
 
 #else
-	SystemCoreClockUpdate(); //update systemcore clock in case you use non-default settings
 
-	/* CONFIGURE THE CLOCK */
-	SystemClock_Config(); // Init the system clock (to be implemented)
 
-	/* SET UP THE PERIPHERICAL */
-
-	/* GPIO */
-	gpio_init(); // init all the gpio (to be implemented)
-	dma_init(); // init the DMA (to be implemented)
-
-	uart2_init(); // init uart2 peripherical
-	spi2_init(); // init spi2 peripherical (to be implemented)
-	adc_init(); // init adc peripherical (to be implemented)
 
 #endif
 
-	SystemCoreClockUpdate();
-	spi_initial();
 
-	data = 0x00;
 
-	SPI1_GPIO->ODR &= ~(1<<8); //NSS enable
-
-	SPI_WriteByte(data);
-	SPI_Read(buffer,16);
-
-	SPI1_GPIO->ODR |= (1<<8); //NSS disable
-
-	STM_EVAL_LEDOn(LED6);
 
   /* Infinite loop */
   while (1)

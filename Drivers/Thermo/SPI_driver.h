@@ -8,8 +8,8 @@
 #define T_SPI SPI1
 
 //From MAXIM INT
-#define SPI_CS_HIGH 0
-#define SPI_CS_LOW 0         
+#define SPI_CS_HIGH SPI1_GPIO->ODR |= (1<<8); //NSS disable
+#define SPI_CS_LOW SPI1_GPIO->ODR &= ~(1<<8); //NSS enable
    
 #define USE_DEFAULT_CRITICAL_CALLBACK 
 

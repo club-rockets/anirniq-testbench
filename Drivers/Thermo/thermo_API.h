@@ -22,17 +22,11 @@ typedef struct _API_THERMO_STRUCT{ // Structure of one thermocouple
 
 } API_THERMO_STRUCT; 
 
-typedef struct _API_THERMO {
-
-  API_THERMO_STRUCT id[NB_THERMO];
-  
-  const void (*junction_temp) (const uint8_t * rxBuffer, long * data, double * temperature);    ///< Pointer to \ref ARM_SPI_GetVersion : Get driver version.
-  const void (*temp)          (const uint8_t * rxBuffer, long * data, double * temperature);    ///< Pointer to \ref ARM_SPI_GetCapabilities : Get driver capabilities.
-  const void (*init)          (void);                                                           ///< Pointer to \ref ARM_SPI_Initialize : Initialize SPI Interface.
-  const void (*uninit)        (void);                                                           ///< Pointer to \ref ARM_SPI_Uninitialize : De-initialize SPI Interface.
-  const void (*get)           (void);                                                           ///< Pointer to \ref ARM_SPI_PowerControl : Control SPI Interface Power.
-  const void (*who)           (void);                                                           ///< Pointer to \ref ARM_SPI_Send : Start sending data to SPI Interface.
-  
-} API_THERMOCOUPLE;
+void junction_temp (const uint8_t * rxBuffer, long * data, double * temperature);    ///< Pointer to \ref ARM_SPI_GetVersion : Get driver version.
+void temp        (const uint8_t * rxBuffer, long * data, double * temperature);    ///< Pointer to \ref ARM_SPI_GetCapabilities : Get driver capabilities.
+void init         (uint8_t nb);                                                           ///< Pointer to \ref ARM_SPI_Initialize : Initialize SPI Interface.
+void uninit        (void);                                                           ///< Pointer to \ref ARM_SPI_Uninitialize : De-initialize SPI Interface.
+void get         (void);                                                           ///< Pointer to \ref ARM_SPI_PowerControl : Control SPI Interface Power.
+void who           (void);                                                           ///< Pointer to \ref ARM_SPI_Send : Start sending data to SPI Interface.
 
 #endif

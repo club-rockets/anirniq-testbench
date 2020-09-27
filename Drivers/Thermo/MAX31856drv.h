@@ -59,7 +59,7 @@
  *\n    int *                   	pun_pmod_value
  *
 
-/* Define to prevent recursive inclusion -------------------------------------*/
+Define to prevent recursive inclusion -------------------------------------*/
 
 #ifndef __MAX31856drv_H
 #define __MAX31856drv_H
