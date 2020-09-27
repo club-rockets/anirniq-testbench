@@ -64,7 +64,9 @@ int main(void)
 
 #ifdef DEBUG
 
-	uint8_t data = 0x0F;
+	uint8_t data;
+
+	uint8_t buffer[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 	/* Initialize LEDs */
 	  STM_EVAL_LEDInit(LED3);
@@ -99,7 +101,14 @@ int main(void)
 	SystemCoreClockUpdate();
 	spi_initial();
 
-	spi_send(data);
+	data = 0x00;
+
+	SPI1_GPIO->ODR &= ~(1<<8); //NSS enable
+
+	SPI_WriteByte(data);
+	SPI_Read(buffer,16);
+
+	SPI1_GPIO->ODR |= (1<<8); //NSS disable
 
 	STM_EVAL_LEDOn(LED6);
 

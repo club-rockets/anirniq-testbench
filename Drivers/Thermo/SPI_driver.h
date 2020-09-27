@@ -26,13 +26,15 @@ void spi_send(uint8_t data);
 
 //From MAXIM INT
 uint8_t SPI_Write(uint8_t *buffer, uint8_t nBytes);
-uint8_t SPI_Read(uint8_t *buffer, uint8_t nBytes);  
+uint8_t SPI_Read(uint8_t *buffer, uint8_t nBytes);
 uint8_t SPI_WriteByte(uint8_t data);
 uint8_t SPI_ReadByte(void);
 void Set_DRDY_Pin_INPUT(void);
 uint8_t DRDY_Pin_Value(void);
 void Enable_Exti(void);    //enable external interrupt
-    
+
+uint16_t SPI_I2S_ReceiveData(SPI_TypeDef* SPIx);
+
 void EnterCriticalSection_UserCallback(void);
 void ExitCriticalSection_UserCallback(void);   
 
