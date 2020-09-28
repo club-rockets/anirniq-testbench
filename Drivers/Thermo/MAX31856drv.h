@@ -133,7 +133,7 @@ Define to prevent recursive inclusion -------------------------------------*/
 #define NO_Fault                    (uint8_t)0x00   
 
 
-
+uint32_t NSS_PIN;
 
 void maxim_31856_init(void);
 void maxim_stop_conversion(void);

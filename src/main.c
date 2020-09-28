@@ -31,8 +31,8 @@ SOFTWARE.
 #include <stdio.h>
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
-#include "MAX31856drv.h"
 #include "stm32f4xx.h"
+#include "thermo_API.h"
 
 #define DEBUG
 
@@ -64,8 +64,6 @@ int main(void)
 
 #ifdef DEBUG
 
-	uint8_t buffer[16];
-
 	/* Initialize LEDs */
 	  STM_EVAL_LEDInit(LED3);
 	  STM_EVAL_LEDInit(LED4);
@@ -80,13 +78,39 @@ int main(void)
 		SystemCoreClockUpdate();
 		spi_initial();
 
-		maxim_31856_init(); //From m31856 driver
+		//Create stucture
+		API_THERMO_STRUCT tp[NB_THERMO];
 
-		maxim_31856_read_nregisters(0x00,buffer,16); //Test if it works
+		API_THERMO_STRUCT* trm1 = &tp[0];
+		API_THERMO_STRUCT* trm2 = &tp[1];
+		API_THERMO_STRUCT* trm2 = &tp[2];
+		API_THERMO_STRUCT* trm2 = &tp[3];
+
+		//Assign pin
+		trm1->pin = SPI_T1;
+		trm2->pin = SPI_T2;
+		trm3->pin = SPI_T3;
+		trm4->pin = SPI_T4;
+
+		//Init thermocouple
+		t_init(trm1,"Thermocouple 1");
+		t_init(trm2,"Thermocouple 2");
+		t_init(trm3,"Thermocouple 3");
+		t_init(trm4,"Thermocouple 4");
+
+		//Start
+		t_start(trm1,Automatic_Conversion);
+		t_start(trm2,Automatic_Conversion);
+		t_start(trm3,Automatic_Conversion);
+		t_start(trm4,Automatic_Conversion);
+
+		//Read
+		t_get(trm1);
+		t_get(trm2);
+		t_get(trm3);
+		t_get(trm4);
 
 		STM_EVAL_LEDOn(LED6);
-
-
 
 #else
 

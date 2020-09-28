@@ -1,14 +1,48 @@
 #include "thermo_API.h"
 
-void init(uint8_t nb){
+void API_init(API_THERMO_STRUCT* t_data, uint8_t nb){
+
+
+
 
 
 
 }
-void deinit(void){}
-void start(void){}
-void stop(void){}
-void junction_temp(const uint8_t * rxBuffer, long * data, double * temperature){
+
+
+
+void t_init(API_THERMO_STRUCT *t_struct, char* name){
+
+		strcpy(t_struct->name,name); //init Thermo name
+		NSS_PIN = t_struct->pin; //Pass thermo pin
+		maxim_31856_init(); //init the driver
+
+}
+
+//One_Shot_Conversion or Automatic_Conversion
+void t_start(API_THERMO_STRUCT *t_struct, uint8_t conversion_mode){
+
+	NSS_PIN = t_struct->pin;
+	maxim_start_conversion(conversion_mode);
+
+}
+
+void t_stop(API_THERMO_STRUCT *t_struct){
+
+	NSS_PIN = t_struct->pin;
+	maxim_stop_conversion();
+
+}
+
+//Must be 16 row
+void t_get(API_THERMO_STRUCT *t_struct){
+
+	NSS_PIN = t_struct->pin;
+	maxim_31856_read_nregisters(0x00,t_struct->data,16);
+
+}
+
+void t_junction_temp(const uint8_t * rxBuffer, long * data, double * temperature){
 
 	long temperatureOffset = 0;
 
@@ -27,7 +61,7 @@ void junction_temp(const uint8_t * rxBuffer, long * data, double * temperature){
 
 }
 
-void temp(const uint8_t * rxBuffer, long * data, double * temperature){	
+void t_temp(const uint8_t * rxBuffer, long * data, double * temperature){
     
     *data = (rxBuffer[0] << 24 | rxBuffer[1] << 16 | rxBuffer[2] << 8 | rxBuffer[3]); //Concatenation des valeurs des 4 registres
 
