@@ -32,7 +32,7 @@ SOFTWARE.
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
 
-#include "ADC_Driver.h"
+#include "Pression_API.h"
 
 #define DEBUG
 /* Private macro */
@@ -60,11 +60,6 @@ int main(void)
   *  SCB->VTOR register.  
   *  E.g.  SCB->VTOR = 0x20000000;  
   */
-
-
-	uint16_t data[3] = {0,0,0};
-	//uint32_t single = 0;
-
 
 #ifdef DEBUG
 
@@ -101,15 +96,24 @@ int main(void)
 	while(!((RCC->CR) & (1<<17)));
 	RCC->CFGR |= 0xA0;*/
 
+	uint16_t data[3] = {0,0,0};
+
 	SystemCoreClockUpdate();
 	//SystemInit();
 
-	adc_init();
-	adc_power(1);
+	API_PRESSURE_STRUCT pr[NB_PRESSURE];
 
-	//adc_single_conversion(&single);
-	init_adc_dma((uint32_t) &data[0]);
-	adc_multi_conversion();
+	p_API_init(pr,data,3);
+
+	API_PRESSURE_STRUCT prs1 = &pr[0];
+	API_PRESSURE_STRUCT prs2 = &pr[1];
+	API_PRESSURE_STRUCT prs3 = &pr[2];
+
+	p_init(prs1,"Pression 1");
+	p_init(prs2,"Pression 2");
+	p_init(prs3,"Pression 3");
+
+	p_start(prs1); //Start the conversion for all value, starting from prs1
 
 	STM_EVAL_LEDOn(LED6); //blue
 
@@ -119,7 +123,6 @@ int main(void)
 
   }
 }
-
 
 /*
  * Callback used by stm32f4_discovery_audio_codec.c.
