@@ -103,19 +103,25 @@ int main(void)
 
 	API_PRESSURE_STRUCT pr[NB_PRESSURE];
 
-	p_API_init(pr,data,3);
+	p_API_init(pr,data,NB_PRESSURE);
 
-	API_PRESSURE_STRUCT prs1 = &pr[0];
-	API_PRESSURE_STRUCT prs2 = &pr[1];
-	API_PRESSURE_STRUCT prs3 = &pr[2];
+	uint32_t *val1 = (uint32_t) &data[0];
+	uint32_t *val2 = (uint32_t) &data[1];
+	uint32_t *val3 = (uint32_t) &data[2];
+
+	API_PRESSURE_STRUCT *prs1 = &pr[0];
+	API_PRESSURE_STRUCT *prs2 = &pr[1];
+	API_PRESSURE_STRUCT *prs3 = &pr[2];
 
 	p_init(prs1,"Pression 1");
-	p_init(prs2,"Pression 2");
-	p_init(prs3,"Pression 3");
+	//p_init(prs2,"Pression 2");
+	//p_init(prs3,"Pression 3");
 
-	p_start(prs1); //Start the conversion for all value, starting from prs1
+	p_start(prs1,data); //Start the conversion for all value, starting from prs1
 
 	STM_EVAL_LEDOn(LED6); //blue
+	  STM_EVAL_LEDInit(LED4);
+	  STM_EVAL_LEDInit(LED5);
 
   /* Infinite loop */
   while (1)
