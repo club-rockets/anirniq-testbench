@@ -69,64 +69,39 @@ int main(void)
 	  STM_EVAL_LEDInit(LED5);
 	  STM_EVAL_LEDInit(LED6);
 
-	  /* Turn on LEDs */
-	 // STM_EVAL_LEDOn(LED4); //green
-	  //STM_EVAL_LEDOn(LED5); //red
-	 // STM_EVAL_LEDOn(LED6); //blue
+	  	uint16_t data[3] = {0,0,0};
+
+	  	SystemCoreClockUpdate();
+
+	  	API_PRESSURE_STRUCT pr[NB_PRESSURE];
+
+	  	API_PRESSURE_STRUCT *prs1 = &pr[0];
+	  	API_PRESSURE_STRUCT *prs2 = &pr[1];
+	  	API_PRESSURE_STRUCT *prs3 = &pr[2];
+
+	  	p_init(prs1,"Pression 1");
+	  	p_init(prs2,"Pression 2");
+	  	p_init(prs3,"Pression 3");
+
+	  	p_start(prs1,data); //Start the conversion for all value, starting from prs1
+
+	  	p_get(prs1,data[0]);
+	  	p_get(prs2,data[1]);
+	  	p_get(prs3,data[2]);
 
 #else
-	SystemCoreClockUpdate(); //update systemcore clock in case you use non-default settings
 
-	/* CONFIGURE THE CLOCK */
-	SystemClock_Config(); // Init the system clock (to be implemented)
-
-	/* SET UP THE PERIPHERICAL */
-
-	/* GPIO */
-	gpio_init(); // init all the gpio (to be implemented)
-	dma_init(); // init the DMA (to be implemented)
-
-	uart2_init(); // init uart2 peripherical
-	spi2_init(); // init spi2 peripherical (to be implemented)
-	adc_init(); // init adc peripherical (to be implemented)
 
 #endif
 
-	/*RCC->CR |= (1<<16);
-	while(!((RCC->CR) & (1<<17)));
-	RCC->CFGR |= 0xA0;*/
 
-	uint16_t data[3] = {0,0,0};
 
-	SystemCoreClockUpdate();
-	//SystemInit();
 
-	API_PRESSURE_STRUCT pr[NB_PRESSURE];
-
-	p_API_init(pr,data,NB_PRESSURE);
-
-	uint32_t *val1 = (uint32_t) &data[0];
-	uint32_t *val2 = (uint32_t) &data[1];
-	uint32_t *val3 = (uint32_t) &data[2];
-
-	API_PRESSURE_STRUCT *prs1 = &pr[0];
-	API_PRESSURE_STRUCT *prs2 = &pr[1];
-	API_PRESSURE_STRUCT *prs3 = &pr[2];
-
-	p_init(prs1,"Pression 1");
-	//p_init(prs2,"Pression 2");
-	//p_init(prs3,"Pression 3");
-
-	p_start(prs1,data); //Start the conversion for all value, starting from prs1
-
-	STM_EVAL_LEDOn(LED6); //blue
-	  STM_EVAL_LEDInit(LED4);
-	  STM_EVAL_LEDInit(LED5);
 
   /* Infinite loop */
   while (1)
   {
-
+		STM_EVAL_LEDInit(LED5);
   }
 }
 
