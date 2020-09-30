@@ -9,43 +9,86 @@
 
 void adc_init(void){
 
-	/* PRESSURE 1 (P1) = ADC CHANNEL X, pin X, GPIO X
-	 * PRESSURE 2 (P2) = ADC CHANNEL X, pin X, GPIO X
-	 * PRESSURE 3 (P3) = ADC CHANNEL X, pin X, GPIO X
-	 *
+	/* ************ NOT CODE ************
+	 * PRESSURE 1 (P1) = ADC CHANNEL 1, pin C1, GPIO C, pin number 30
+	 * PRESSURE 2 (P2) = ADC CHANNEL 1, pin C2, GPIO C, pin number 31
+	 * PRESSURE 3 (P3) = ADC CHANNEL 1, pin C3, GPIO C, pin number 32
 	 * See ADC_Driver.h for correct define value */
 
-	RCC->APB2ENR |= P1_ADC_CLK | P2_ADC_CLK | P3_ADC_CLK; //Enable ADC clock
-
+	RCC->APB2ENR |= ADC1_EN; //Enable ADC clock
 	RCC->AHB1ENR |= P1_GPIO_CLK | P2_GPIO_CLK | P3_GPIO_CLK; //Enable GPIO clock
 
 	P1_GPIO_PORT->MODER |= P1_GPIO_ANALOG | P2_GPIO_ANALOG | P3_GPIO_ANALOG; //Configure GPIO to analog input
+	P1_GPIO_PORT->PUPDR |= P1_GPIO_NO_PULL | P2_GPIO_NO_PULL | P3_GPIO_NO_PULL; //No pull mode
 
-	P_ADC->CR1 |= RESOLUTION; // Set the resolution of the ADC to 12 bits
+	RCC->CFGR |= ADC_DIV_2_PRESCALER; //Prescaler division by 2
 
-	P_ADC->SMPR1 |= P1_SAMPLE | P2_SAMPLE | P3_SAMPLE; // Set the sample time to 3 cycles
+	P_ADC->CR1 |= RESOLUTION | (1<<8); // Set the resolution of the ADC to 12 bits
+	P_ADC->CR2 |= (1<<9) | (1<<8);
+
+	//P_ADC->SMPR2 |= P1_SAMPLE | P2_SAMPLE | P3_SAMPLE; // Set the sample time to 3 cycles
 
 }
 
-void adc_conversion(uint32_t *adcDR){
+void adc_multi_conversion(void){
 
 
 	/* ADC CONFIGURATION */
+	P_ADC->SQR1 |= MULTIPLE_CONVERSION; //Select the conversion mode
 
-	/* LECTURE */
+	P_ADC->SQR3 |= (P1_ADC_IN << 0) | (P2_ADC_IN << 5) | (P3_ADC_IN << 10); //Select the channel
 
-	while((ADC->CSR & P1_EOC_MASK) == 0);
+	P_ADC->CR2 |= START_CONVERSION; //Start the conversion
 
-	adcDR[0] = P_ADC->DR;
+}
 
-	while((ADC->CSR & P2_EOC_MASK) == 0);
+void init_adc_dma(uint32_t data_adr){
 
-	adcDR[1] = P_ADC->DR;
+	RCC->AHB1ENR |= (1<<22); //Enable DMA2 clk
 
-	while((ADC->CSR & P2_EOC_MASK) == 0);
+	DMA2_Stream0->CR &= (0b000<<25); // Select channel 0
+	DMA2_Stream0->CR &= (0b00<<23); //Memory bust single
+	DMA2_Stream0->CR &=(0b00<<21); //Peripheral bust single
+	DMA2_Stream0->CR |= (0b10<<16) | (1<<13) | (1<<11) | (1<<10) | (1<<8);
+	DMA2_Stream0->CR |= (0<<9);
+	DMA2_Stream0->CR |= (0b00<<6);
+	DMA2_Stream0->NDTR = 3; /*Number of data items*/
+	DMA2_Stream0->PAR = (uint32_t) &P_ADC->DR; /*Peripheral base address*/
+	DMA2_Stream0->M0AR = data_adr; //memory base 0 address
+	DMA2_Stream0->FCR = 0x00000021; //Direct mode and Threshold half full
 
-	adcDR[2] = P_ADC->DR;
+	DMA2_Stream0->CR |= (1<<0); //Enable DMA2 Stream 0
 
+}
+
+void adc_single_conversion(uint32_t *data){
+
+
+	P_ADC->SQR1 &= (0x0<<20); //Select the conversion mode
+
+	P_ADC->SQR3 |= (P1_CHANNEL << 0); //Select the channel
+
+	P_ADC->CR2 |= START_CONVERSION; //Start the conversion
+
+	while((P_ADC->SR & ADC_EOC_MASK) == 0);
+
+	*data = P_ADC->DR;
+
+}
+
+void adc_calibration(void){}
+
+void adc_power(uint32_t val){
+
+	if(val){
+
+		P_ADC->CR2 |= ADC_POWER_UP; //Power up ADC
+
+	}else if(!val){
+
+		P_ADC->CR2 &= ~ADC_POWER_UP; //Power down ADC
+
+	}
 
 }
 

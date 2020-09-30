@@ -8,7 +8,6 @@
 ######################################
 TARGET = avionique-testbench
 
-
 ######################################
 # building variables
 ######################################
@@ -68,9 +67,9 @@ src/main.c \
 src/stm32f4xx_it.c \
 src/syscalls.c \
 src/system_stm32f4xx.c \
-src/tiny_printf.c
-#Drivers/LCD/LCD_Driver.c
-#Drivers/Pression/ADC_Driver.c
+src/tiny_printf.c \
+Drivers/Pression/ADC_Driver.c \
+Drivers/Pression/Pression_API.c
 #Drivers/RFD900/uart2.c
 #Drivers/SD/fatfs_sd.c
 #Drivers/loadcell/HX711.c
@@ -82,7 +81,7 @@ src/startup_stm32f40xx.s
 #######################################
 # binaries
 #######################################
-PREFIX = arm-none-eabi-
+PREFIX = arm-atollic-eabi-
 # The gcc compiler bin path can be either defined in make command via GCC_PATH variable (> make GCC_PATH=xxx)
 # either it can be added to the PATH environment variable.
 ifdef GCC_PATH
@@ -132,6 +131,7 @@ C_INCLUDES =  \
 -ILibraries/CMSIS/Include \
 -ILibraries/Device/STM32F4xx/Include \
 -IUtilities/STM32F4-Discovery \
+-IDrivers/Pression \
 -Isrc
 
 
