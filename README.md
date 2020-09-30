@@ -1,4 +1,7 @@
 # avionique-testbench
+
+/!\ MERCI DE MODIFIER UNIQUEMENT LE FICHIER SRC/MAIN.C DANS CE REPOSITORY /!\
+
 Projet avionique testbench
 
 Spec :
