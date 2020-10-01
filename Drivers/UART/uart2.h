@@ -12,6 +12,8 @@
 #include "stm32f4xx.h"
 
 #define UART2_BUFFER_SIZE 100
+#define UART2_GPIO GPIOA
+#define UART2_BAUDRATE 9600
 
 void uart2_init(void);
 

@@ -12,7 +12,7 @@ static void(*volatile uart2_rxCallback)(void) = 0;
 volatile struct{
 	uint8_t start,end;
 	uint8_t Buff[UART2_BUFFER_SIZE];
-} uart1_RxBuff = {0},uart1_TxBuff = {0};
+} uart2_RxBuff = {0},uart2_RxBuff = {0};
 
 void uart2_init() {
 
@@ -22,11 +22,11 @@ void uart2_init() {
     /*Enable GPIO clock for uart2*/
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
 
-    GPIOA->MODER |= GPIO_MODER_MODER2_1 | GPIO_MODER_MODER3_1; //Alternate function
-    GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR2 | GPIO_OSPEEDER_OSPEEDR3; //Full speed GPIO
-    GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR2; //No pull up nor pull down
-    GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR3; //No pull up nor pull down
-    GPIOA->AFR[0] |= (0x7<<8) | (0x7<<12); //Init alternate function
+    UART2_GPIO->MODER |= GPIO_MODER_MODER2_1 | GPIO_MODER_MODER3_1; //Alternate function
+    UART2_GPIO->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR2 | GPIO_OSPEEDER_OSPEEDR3; //Full speed GPIO
+    UART2_GPIO->PUPDR &= ~GPIO_PUPDR_PUPDR2; //No pull up nor pull down
+    UART2_GPIO->PUPDR &= ~GPIO_PUPDR_PUPDR3; //No pull up nor pull down
+    UART2_GPIO->AFR[0] |= (0x7<<8) | (0x7<<12); //Init alternate function
 
 	//enable the peripheral
 	USART2->CR1 |= USART_CR1_UE;
@@ -55,19 +55,19 @@ void uart2_init() {
 //return positive is transfer possible without buffer overrun
 uint32_t uart2_transmit(uint8_t*buff,uint8_t size){
 	//check for space
-	if(uart1_TxBuff.end<uart1_TxBuff.start){
-		if(uart1_TxBuff.start-uart1_TxBuff.end -1 < size) return 0;
+	if(uart2_RxBuff.end<uart2_RxBuff.start){
+		if(uart2_RxBuff.start-uart2_RxBuff.end -1 < size) return 0;
 	}
-	else if (uart1_TxBuff.end>uart1_TxBuff.start){
-		if(UART2_BUFFER_SIZE -1 -uart1_TxBuff.end + uart1_TxBuff.start < size) return 0;
+	else if (uart2_RxBuff.end>uart2_RxBuff.start){
+		if(UART2_BUFFER_SIZE -1 -uart2_RxBuff.end + uart2_RxBuff.start < size) return 0;
 	}
 
 	//copy the data in the buffer
 	uint8_t i;
 	for(i=0;i<size;i++){
-		uart1_TxBuff.end++;
-		uart1_TxBuff.end%=UART2_BUFFER_SIZE;
-		uart1_TxBuff.Buff[uart1_TxBuff.end] = buff[i];
+		uart2_RxBuff.end++;
+		uart2_RxBuff.end%=UART2_BUFFER_SIZE;
+		uart2_RxBuff.Buff[uart2_RxBuff.end] = buff[i];
 	}
 	//enable transmit interrupt
 	USART2->CR1 |= USART_CR1_TXEIE;
@@ -75,13 +75,13 @@ uint32_t uart2_transmit(uint8_t*buff,uint8_t size){
 }
 
 uint8_t uart2_rxBuffAvailable(){
-	return !(uart1_RxBuff.end == uart1_RxBuff.start);
+	return !(uart2_RxBuff.end == uart2_RxBuff.start);
 }
 
 uint8_t uart2_get(){
-	uart1_RxBuff.start++;
-	uart1_RxBuff.start%=UART2_BUFFER_SIZE;
-	return uart1_RxBuff.Buff[uart1_RxBuff.start];
+	uart2_RxBuff.start++;
+	uart2_RxBuff.start%=UART2_BUFFER_SIZE;
+	return uart2_RxBuff.Buff[uart2_RxBuff.start];
 }
 
 void uart2_registerRxCallback(void (*callback)(void)){
@@ -91,17 +91,17 @@ void uart2_registerRxCallback(void (*callback)(void)){
 void USART2_IRQHandler(void){
 	if(USART2->SR & USART_SR_TXE){
 		//if tx buffer not empty
-		if(uart1_TxBuff.end-uart1_TxBuff.start){
-			uart1_TxBuff.start++;
-			uart1_TxBuff.start%=UART2_BUFFER_SIZE;
-			USART2->DR = uart1_TxBuff.Buff[uart1_TxBuff.start];
+		if(uart2_RxBuff.end-uart2_RxBuff.start){
+			uart2_RxBuff.start++;
+			uart2_RxBuff.start%=UART2_BUFFER_SIZE;
+			USART2->DR = uart2_RxBuff.Buff[uart2_RxBuff.start];
 		}
 		else USART2->CR1 &=~USART_CR1_TXEIE;
 	}
 	if(USART2->SR & USART_SR_RXNE){
-		uart1_RxBuff.end++;
-		uart1_RxBuff.end%=UART2_BUFFER_SIZE;
-		uart1_RxBuff.Buff[uart1_RxBuff.end] = USART2->DR;
+		uart2_RxBuff.end++;
+		uart2_RxBuff.end%=UART2_BUFFER_SIZE;
+		uart2_RxBuff.Buff[uart2_RxBuff.end] = USART2->DR;
 		if(uart2_rxCallback){
 			uart2_rxCallback();
 		}

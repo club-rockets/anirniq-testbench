@@ -12,6 +12,8 @@
 #include "stm32f4xx.h"
 
 #define UART1_BUFFER_SIZE 100
+#define UART1_GPIO GPIOB
+#define UART1_BAUDRATE 460800
 
 void uart1_init(void);
 

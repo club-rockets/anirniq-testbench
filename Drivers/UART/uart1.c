@@ -20,13 +20,13 @@ void uart1_init() {
 	//enable the peripheral clock
 
     /*Enable GPIO clock for uart2*/
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
 
-    GPIOA->MODER |= GPIO_MODER_MODER2_1 | GPIO_MODER_MODER3_1; //Alternate function
-    GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR2 | GPIO_OSPEEDER_OSPEEDR3; //Full speed GPIO
-    GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR2; //No pull up nor pull down
-    GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR3; //No pull up nor pull down
-    GPIOA->AFR[0] |= (0x7<<8) | (0x7<<12); //Init alternate function
+    GPIOA->MODER |= GPIO_MODER_MODER6_1 | GPIO_MODER_MODER7_1; //Alternate function
+    GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR6 | GPIO_OSPEEDER_OSPEEDR7; //Full speed GPIO
+    GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR6; //No pull up nor pull down
+    GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR7; //No pull up nor pull down
+    GPIOA->AFR[0] |= (0x7<<24) | (0x7<<28); //Init alternate function
 
 	//enable the peripheral
 	USART1->CR1 |= USART_CR1_UE;
