@@ -73,13 +73,15 @@ int main(void)
 	  uint8_t test[10] = {'C','O','U','C','O','U'};
 
 	  uart2_init();
+
+	  __enable_irq();
+
 	  uart2_transmit(test,6);
 
 	  /* Turn on LEDs */
 	  STM_EVAL_LEDOn(LED3);
 	  STM_EVAL_LEDOn(LED4);
 	  STM_EVAL_LEDOn(LED5);
-	  STM_EVAL_LEDOn(LED6);
 
 #else
 	SystemCoreClockUpdate(); //update systemcore clock in case you use non-default settings
@@ -102,7 +104,7 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
-
+	  STM_EVAL_LEDOn(LED6);
   }
 }
 
