@@ -5,7 +5,7 @@
  *      Author: Marc-Andre Denis
  */
 
-#include "uart2.h"
+#include "../UART/uart2.h"
 
 static void(*volatile uart2_rxCallback)(void) = 0;
 
@@ -26,7 +26,8 @@ void uart2_init() {
 	//settings for 42mhz APB1 clock
 
 	//USART2->BRR = 11<<4 | 0x6;
-	USART2->BRR = 5<<4 | 0x7;
+	//USART2->BRR = 5<<4 | 0x7;
+	USART2->BRR = 4375; //9600 baud for 42mhz clock
 
 	//enable receiver mode
 	USART2->CR1 |= USART_CR1_RE;
@@ -78,7 +79,7 @@ void uart2_registerRxCallback(void (*callback)(void)){
 	uart2_rxCallback = callback;
 }
 
-void USART2_IRQHandler(){
+void USART2_IRQHandler(void){
 	if(USART2->SR & USART_SR_TXE){
 		//if tx buffer not empty
 		if(uart1_TxBuff.end-uart1_TxBuff.start){

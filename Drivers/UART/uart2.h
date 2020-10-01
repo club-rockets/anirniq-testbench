@@ -8,13 +8,13 @@
 #ifndef DRIVERS_UART1_H_
 #define DRIVERS_UART1_H_
 
-#include "stm32f407xx.h"
+#include "stm32f4xx.h"
 
 #define UART2_BUFFER_SIZE 100
 
 void uart2_init();
 
-uint32_t uart2_transmit(uint8_t*buff,uint8_t size);
+uint32_t uart2_transmit(uint8_t *buff,uint8_t size);
 
 uint8_t uart2_rxBuffAvailable();
 

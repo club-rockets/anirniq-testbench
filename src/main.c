@@ -32,6 +32,8 @@ SOFTWARE.
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
 
+#include "uart2.h"
+
 #define DEBUG
 
 /* Private macro */
@@ -67,6 +69,11 @@ int main(void)
 	  STM_EVAL_LEDInit(LED4);
 	  STM_EVAL_LEDInit(LED5);
 	  STM_EVAL_LEDInit(LED6);
+
+	  uint8_t test[10] = {'C','O','U','C','O','U'};
+
+	  uart2_init();
+	  uart2_transmit(test,6);
 
 	  /* Turn on LEDs */
 	  STM_EVAL_LEDOn(LED3);
