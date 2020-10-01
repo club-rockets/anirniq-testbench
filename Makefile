@@ -68,6 +68,7 @@ src/main.c \
 src/stm32f4xx_it.c \
 src/syscalls.c \
 src/system_stm32f4xx.c \
+Drivers/UART/uart1.c \
 Drivers/UART/uart2.c \
 src/tiny_printf.c
 #Drivers/LCD/LCD_Driver.c
