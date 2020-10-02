@@ -6,9 +6,9 @@ void p_API_init(API_PRESSURE_STRUCT *t_data, uint8_t nb){
 
 }
 
-void p_init(API_PRESSURE_STRUCT *t_struct, char* name){
+void p_init(API_PRESSURE_STRUCT *t_struct, uint8_t id){
 
-	strcpy(t_struct->name,name); //init Pressure name
+	t_struct->id = id;
 	adc_init();
 
 }
