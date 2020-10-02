@@ -83,9 +83,9 @@ int main(void)
 	  	API_PRESSURE_STRUCT *prs2 = &pr[1];
 	  	API_PRESSURE_STRUCT *prs3 = &pr[2];
 
-	  	p_init(prs1,"Pression 1");
-	  	p_init(prs2,"Pression 2");
-	  	p_init(prs3,"Pression 3");
+	  	p_init(prs1,1);
+	  	p_init(prs2,2);
+	  	p_init(prs3,3);
 
 	  	p_start(prs1,data); //Start the conversion for all value, starting from prs1
 
