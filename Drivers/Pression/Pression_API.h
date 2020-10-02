@@ -21,7 +21,7 @@
 
 typedef struct _API_PRESSURE_STRUCT{ // Structure of one thermocouple
 
-  char			name[20];
+  uint8_t		id;
   uint32_t       *data;
   uint16_t		prsdata;
 
