@@ -12,7 +12,7 @@ static void(*volatile uart2_rxCallback)(void) = 0;
 volatile struct{
 	uint8_t start,end;
 	uint8_t Buff[UART2_BUFFER_SIZE];
-} uart2_RxBuff = {0},uart2_RxBuff = {0};
+} uart2_RxBuff = {0},uart2_TxBuff = {0};
 
 void uart2_init() {
 
@@ -55,19 +55,19 @@ void uart2_init() {
 //return positive is transfer possible without buffer overrun
 uint32_t uart2_transmit(uint8_t*buff,uint8_t size){
 	//check for space
-	if(uart2_RxBuff.end<uart2_RxBuff.start){
-		if(uart2_RxBuff.start-uart2_RxBuff.end -1 < size) return 0;
+	if(uart2_TxBuff.end<uart2_TxBuff.start){
+		if(uart2_TxBuff.start-uart2_TxBuff.end -1 < size) return 0;
 	}
-	else if (uart2_RxBuff.end>uart2_RxBuff.start){
-		if(UART2_BUFFER_SIZE -1 -uart2_RxBuff.end + uart2_RxBuff.start < size) return 0;
+	else if (uart2_TxBuff.end>uart2_TxBuff.start){
+		if(UART2_BUFFER_SIZE -1 -uart2_TxBuff.end + uart2_TxBuff.start < size) return 0;
 	}
 
 	//copy the data in the buffer
 	uint8_t i;
 	for(i=0;i<size;i++){
-		uart2_RxBuff.end++;
-		uart2_RxBuff.end%=UART2_BUFFER_SIZE;
-		uart2_RxBuff.Buff[uart2_RxBuff.end] = buff[i];
+		uart2_TxBuff.end++;
+		uart2_TxBuff.end%=UART2_BUFFER_SIZE;
+		uart2_TxBuff.Buff[uart2_TxBuff.end] = buff[i];
 	}
 	//enable transmit interrupt
 	USART2->CR1 |= USART_CR1_TXEIE;
@@ -91,10 +91,10 @@ void uart2_registerRxCallback(void (*callback)(void)){
 void USART2_IRQHandler(void){
 	if(USART2->SR & USART_SR_TXE){
 		//if tx buffer not empty
-		if(uart2_RxBuff.end-uart2_RxBuff.start){
-			uart2_RxBuff.start++;
-			uart2_RxBuff.start%=UART2_BUFFER_SIZE;
-			USART2->DR = uart2_RxBuff.Buff[uart2_RxBuff.start];
+		if(uart2_TxBuff.end-uart2_TxBuff.start){
+			uart2_TxBuff.start++;
+			uart2_TxBuff.start%=UART2_BUFFER_SIZE;
+			USART2->DR = uart2_TxBuff.Buff[uart2_TxBuff.start];
 		}
 		else USART2->CR1 &=~USART_CR1_TXEIE;
 	}

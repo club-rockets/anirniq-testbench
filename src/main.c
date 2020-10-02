@@ -63,6 +63,10 @@ int main(void)
 
 #ifdef DEBUG
 
+	  uart2_init();
+
+	  __enable_irq();
+
 	  /* Initialize LEDs */
 	  STM_EVAL_LEDInit(LED3);
 	  STM_EVAL_LEDInit(LED4);
