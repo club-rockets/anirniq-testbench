@@ -89,6 +89,10 @@ int main(void)
 	  	p_get(prs2,data[1]);
 	  	p_get(prs3,data[2]);
 
+	  	p_send(prs1,GROUND);
+	  	p_send(prs2,GROUND);
+	  	p_send(prs3,GROUND);
+
 #else
 
 
