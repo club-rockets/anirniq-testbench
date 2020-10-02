@@ -70,7 +70,8 @@ src/system_stm32f4xx.c \
 src/tiny_printf.c \
 Drivers/Pression/ADC_Driver.c \
 Drivers/Pression/Pression_API.c
-#Drivers/RFD900/uart2.c
+Drivers/UART/uart1.c \
+Drivers/UART/uart2.c \
 #Drivers/SD/fatfs_sd.c
 #Drivers/loadcell/HX711.c
 
