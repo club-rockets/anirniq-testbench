@@ -27,6 +27,28 @@ void p_get(API_PRESSURE_STRUCT *t_struct, uint16_t data){
 
 }
 
+void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port){
+
+	char strdata[6];
+	sprintf(strdata,"%d",t_struct->prsdata);
+
+	if(!port){
+
+		uart2_transmit("#SENSOR_NAME:",13);
+		uart2_transmit(t_struct->name,strlen(t_struct->name));
+		uart2_transmit("#DATA:",6);
+		uart2_transmit(strdata,strlen(strdata));
+
+	}else{
+
+		uart1_transmit("#SENSOR_NAME:",13);
+		uart1_transmit(t_struct->name,strlen(t_struct->name));
+		uart1_transmit("#DATA:",6);
+		uart1_transmit(strdata,strlen(strdata));
+
+	}
+}
+
 void p_stop(void){
 
 	adc_power(0);
