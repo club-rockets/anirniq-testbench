@@ -2,12 +2,10 @@
 #define FALSE 0
 #define bool BYTE
 
-#include "stm32f4xx_hal.h"
+#include "stm32g4xx_hal.h"
 
 #include "diskio.h"
 #include "fatfs_sd.h"
-
-#include "cmsis_os.h"
 
 #define SD_TRANSFER_CPLT_SIGNAL (1<<0)
 
@@ -18,8 +16,6 @@ static uint8_t PowerFlag = 0;				/* Power flag */
 /***************************************
  * SPI functions
  **************************************/
-
-static osThreadId sd_thread;
 
 /* slave select */
 static void SELECT(void)
@@ -42,35 +38,7 @@ static void SPI_TxByte(uint8_t data)
 /* SPI transmit buffer */
 static void SPI_TxBuffer(uint8_t *buffer, uint16_t len)
 {
-	sd_thread = osThreadGetId();
-	HAL_SPI_Transmit_DMA(HSPI_SDCARD,buffer,len);
-	osSignalWait(SD_TRANSFER_CPLT_SIGNAL,osWaitForever);
-}
-
-/* SPI transmit buffer */
-static void SPI_RxBuffer(uint8_t *buffer, uint16_t len)
-{
-	sd_thread = osThreadGetId();
-
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = SD_MOSI_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    HAL_GPIO_Init(SD_MOSI_PORT, &GPIO_InitStruct);
-
-    HAL_GPIO_WritePin(SD_MOSI_PORT,SD_MOSI_PIN,GPIO_PIN_SET);
-	//HAL_SPI_Receive(&hspi2,buffer,len,1000);
-	HAL_SPI_Receive_DMA(HSPI_SDCARD,buffer,len);
-	osSignalWait(SD_TRANSFER_CPLT_SIGNAL,osWaitForever);
-
-    GPIO_InitStruct.Pin = SD_MOSI_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
-    HAL_GPIO_Init(SD_MOSI_PORT, &GPIO_InitStruct);
-
+	HAL_SPI_Transmit(HSPI_SDCARD,buffer,len,1000);
 }
 
 /* SPI receive a byte */
@@ -78,14 +46,20 @@ static uint8_t SPI_RxByte(void)
 {
 	uint8_t data;
 	uint8_t dummy = 0xff;
-	/*
-	HAL_SPI_Receive_DMA(&hspi2,&data,1);
-	osSignalWait(SD_TRANSFER_CPLT_SIGNAL,osWaitForever);
-	*/
-	//HAL_SPI_Receive(&hspi2,&data,1,1000);
+
 	HAL_SPI_TransmitReceive(HSPI_SDCARD,&dummy,&data,1,1000);
 
 	return data;
+}
+
+/* SPI transmit buffer */
+static void SPI_RxBuffer(uint8_t *buffer, uint16_t len)
+{
+	int i = 0;
+	for(i=0;i<len;i++)
+	{
+		buffer[i] = SPI_RxByte();
+	}
 }
 
 /***************************************
@@ -97,25 +71,24 @@ static uint8_t SD_ReadyWait(void)
 {
 	uint8_t res;
 	/* timeout 500ms */
-	uint32_t timeCounter = osKernelSysTick() + 500;
+	uint32_t timeCounter = HAL_GetTick() + 500;
 
 	/* if SD goes ready, receives 0xFF */
 	do {
 		res = SPI_RxByte();
-	} while ((res != 0xFF) && (timeCounter>osKernelSysTick()));
+	} while ((res != 0xFF) && (timeCounter>HAL_GetTick()));
 
 	return res;
 }
 
 /* power on */
-static void SD_PowerOn(void) 
+static void SD_PowerOn(void)
 {
 	uint8_t args[6];
 	uint32_t cnt = 0x1FFF;
 
-	  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
-	  hspi2.Init.CRCPolynomial = 10;
-	  HAL_SPI_Init(&hspi2);
+	HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
+	HAL_SPI_Init(HSPI_SDCARD);
 
 	/* transmit bytes to wake up */
 	DESELECT();
@@ -151,13 +124,13 @@ static void SD_PowerOn(void)
 }
 
 /* power off */
-static void SD_PowerOff(void) 
+static void SD_PowerOff(void)
 {
 	PowerFlag = 0;
 }
 
 /* check power flag */
-static uint8_t SD_CheckPower(void) 
+static uint8_t SD_CheckPower(void)
 {
 	return PowerFlag;
 }
@@ -168,12 +141,12 @@ static bool SD_RxDataBlock(BYTE *buff, UINT len)
 {
 	uint8_t token;
 
-	uint32_t timeCounter = osKernelSysTick() + 50;
+	uint32_t timeCounter = HAL_GetTick() + 50;
 
 	/* loop until receive a response or timeout */
 	do {
 		token = SPI_RxByte();
-	} while((token == 0xFF) && (timeCounter > osKernelSysTick()));
+	} while((token == 0xFF) && (timeCounter > HAL_GetTick()));
 
 	/* invalid response */
 	if(token != 0xFE) return FALSE;
@@ -199,7 +172,7 @@ static bool SD_RxDataBlock(BYTE *buff, UINT len)
 #if _USE_WRITE == 1
 static bool SD_TxDataBlock(const uint8_t *buff, BYTE token)
 {
-	uint8_t resp;
+	uint8_t resp = 0;
 	uint8_t i = 0;
 
 	/* wait SD ready */
@@ -281,7 +254,7 @@ static BYTE SD_SendCmd(BYTE cmd, uint32_t arg)
  **************************************/
 
 /* initialize SD */
-DSTATUS SD_disk_initialize(BYTE drv) 
+DSTATUS SD_disk_initialize(BYTE drv)
 {
 	uint8_t n, type, ocr[4];
 	uint32_t timeCounter = 0;
@@ -306,7 +279,7 @@ DSTATUS SD_disk_initialize(BYTE drv)
 	{
 		/* timeout 1 sec */
 		//Timer1 = 1000;
-		timeCounter = osKernelSysTick()+1000;
+		timeCounter = HAL_GetTick()+1000;
 
 		/* SDC V2+ accept CMD8 command, http://elm-chan.org/docs/mmc/mmc_e.html */
 		if (SD_SendCmd(CMD8, 0x1AA) == 1)
@@ -323,10 +296,10 @@ DSTATUS SD_disk_initialize(BYTE drv)
 				/* ACMD41 with HCS bit */
 				do {
 					if (SD_SendCmd(CMD55, 0) <= 1 && SD_SendCmd(CMD41, 1UL << 30) == 0) break;
-				} while (timeCounter>osKernelSysTick());
+				} while (timeCounter>HAL_GetTick());
 
 				/* READ_OCR */
-				if ((timeCounter>osKernelSysTick()) && SD_SendCmd(CMD58, 0) == 0)
+				if ((timeCounter>HAL_GetTick()) && SD_SendCmd(CMD58, 0) == 0)
 				{
 					/* Check CCS bit */
 					for (n = 0; n < 4; n++)
@@ -355,10 +328,10 @@ DSTATUS SD_disk_initialize(BYTE drv)
 					if (SD_SendCmd(CMD1, 0) == 0) break; /* CMD1 */
 				}
 
-			} while ((timeCounter>osKernelSysTick()));
+			} while ((timeCounter>HAL_GetTick()));
 
 			/* SET_BLOCKLEN */
-			if (!(timeCounter>osKernelSysTick()) || SD_SendCmd(CMD16, 512) != 0) type = 0;
+			if (!(timeCounter>HAL_GetTick()) || SD_SendCmd(CMD16, 512) != 0) type = 0;
 		}
 	}
 
@@ -373,11 +346,8 @@ DSTATUS SD_disk_initialize(BYTE drv)
 	{
 		Stat &= ~STA_NOINIT;
 
-	  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
-	  hspi2.Init.CRCPolynomial = 10;
-	  HAL_SPI_Init(&hspi2);
-
-
+	  HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
+	  HAL_SPI_Init(HSPI_SDCARD);
 	}
 	else
 	{
@@ -389,14 +359,14 @@ DSTATUS SD_disk_initialize(BYTE drv)
 }
 
 /* return disk status */
-DSTATUS SD_disk_status(BYTE drv) 
+DSTATUS SD_disk_status(BYTE drv)
 {
 	if (drv) return STA_NOINIT;
 	return Stat;
 }
 
 /* read sector */
-DRESULT SD_disk_read(BYTE pdrv, BYTE* buff, DWORD sector, UINT count) 
+DRESULT SD_disk_read(BYTE pdrv, BYTE* buff, DWORD sector, UINT count)
 {
 	/* pdrv should be 0 */
 	if (pdrv || !count) return RES_PARERR;
@@ -438,7 +408,7 @@ DRESULT SD_disk_read(BYTE pdrv, BYTE* buff, DWORD sector, UINT count)
 
 /* write sector */
 #if _USE_WRITE == 1
-DRESULT SD_disk_write(BYTE pdrv, const BYTE* buff, DWORD sector, UINT count) 
+DRESULT SD_disk_write(BYTE pdrv, const BYTE* buff, DWORD sector, UINT count)
 {
 	/* pdrv should be 0 */
 	if (pdrv || !count) return RES_PARERR;
@@ -493,7 +463,7 @@ DRESULT SD_disk_write(BYTE pdrv, const BYTE* buff, DWORD sector, UINT count)
 #endif /* _USE_WRITE */
 
 /* ioctl */
-DRESULT SD_disk_ioctl(BYTE drv, BYTE ctrl, void *buff) 
+DRESULT SD_disk_ioctl(BYTE drv, BYTE ctrl, void *buff)
 {
 	DRESULT res;
 	uint8_t n, csd[16], *ptr = buff;
@@ -587,18 +557,15 @@ DRESULT SD_disk_ioctl(BYTE drv, BYTE ctrl, void *buff)
 
 	return res;
 }
-
-
+/*
 void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi){
 	if(hspi == &hspi2){
 		osSignalSet(sd_thread,SD_TRANSFER_CPLT_SIGNAL);
 	}
-
 }
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi){
 	if(hspi == &hspi2){
 		osSignalSet(sd_thread,SD_TRANSFER_CPLT_SIGNAL);
-
 	}
-
 }
+*/
