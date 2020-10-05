@@ -2,8 +2,6 @@
 #define FALSE 0
 #define bool BYTE
 
-#include "stm32g4xx_hal.h"
-
 #include "diskio.h"
 #include "fatfs_sd.h"
 
@@ -17,37 +15,28 @@ static uint8_t PowerFlag = 0;				/* Power flag */
  * SPI functions
  **************************************/
 
-/* slave select */
-static void SELECT(void)
-{
-	HAL_GPIO_WritePin(SD_CS_PORT, SD_CS_PIN, GPIO_PIN_RESET);
-}
-
-/* slave deselect */
-static void DESELECT(void)
-{
-	HAL_GPIO_WritePin(SD_CS_PORT, SD_CS_PIN, GPIO_PIN_SET);
-}
-
 /* SPI transmit a byte */
 static void SPI_TxByte(uint8_t data)
 {
-	HAL_SPI_Transmit(HSPI_SDCARD,&data,1,1000);
+	//HAL_SPI_Transmit(HSPI_SDCARD,&data,1,1000);
+	SPI2_WriteByte(data);
 }
 
 /* SPI transmit buffer */
 static void SPI_TxBuffer(uint8_t *buffer, uint16_t len)
 {
-	HAL_SPI_Transmit(HSPI_SDCARD,buffer,len,1000);
+	SPI2_Write(buffer,(uint8_t)len);
+	//HAL_SPI_Transmit(HSPI_SDCARD,buffer,len,1000);
 }
 
 /* SPI receive a byte */
 static uint8_t SPI_RxByte(void)
 {
 	uint8_t data;
-	uint8_t dummy = 0xff;
+	//uint8_t dummy = 0xff;
 
-	HAL_SPI_TransmitReceive(HSPI_SDCARD,&dummy,&data,1,1000);
+	data = SPI2_ReadByte();
+	//HAL_SPI_TransmitReceive(HSPI_SDCARD,&dummy,&data,1,1000);
 
 	return data;
 }
@@ -71,12 +60,12 @@ static uint8_t SD_ReadyWait(void)
 {
 	uint8_t res;
 	/* timeout 500ms */
-	uint32_t timeCounter = HAL_GetTick() + 500;
+	uint32_t timeCounter = HAL_GetTick() + 500; //Changer ca
 
 	/* if SD goes ready, receives 0xFF */
 	do {
 		res = SPI_RxByte();
-	} while ((res != 0xFF) && (timeCounter>HAL_GetTick()));
+	} while ((res != 0xFF) && (timeCounter>HAL_GetTick())); //Changer ca
 
 	return res;
 }
@@ -87,8 +76,9 @@ static void SD_PowerOn(void)
 	uint8_t args[6];
 	uint32_t cnt = 0x1FFF;
 
-	HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
-	HAL_SPI_Init(HSPI_SDCARD);
+	//HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
+	//HAL_SPI_Init(HSPI_SDCARD);
+	SPI2_initial();
 
 	/* transmit bytes to wake up */
 	DESELECT();

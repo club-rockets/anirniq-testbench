@@ -86,7 +86,6 @@ uint8_t SPI2_Write(uint8_t *buffer, uint8_t nBytes){
 	return 0;
 }
 
-
 uint8_t SPI2_Read(uint8_t *buffer, uint8_t nBytes){
 
 	uint8_t i;
