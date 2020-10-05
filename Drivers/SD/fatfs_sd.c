@@ -60,12 +60,12 @@ static uint8_t SD_ReadyWait(void)
 {
 	uint8_t res;
 	/* timeout 500ms */
-	uint32_t timeCounter = HAL_GetTick() + 500; //Changer ca
+	uint32_t timeCounter = get_time_ms() + 500; //Changer ca
 
 	/* if SD goes ready, receives 0xFF */
 	do {
 		res = SPI_RxByte();
-	} while ((res != 0xFF) && (timeCounter>HAL_GetTick())); //Changer ca
+	} while ((res != 0xFF) && (timeCounter>get_time_ms())); //Changer ca
 
 	return res;
 }
@@ -131,12 +131,12 @@ static bool SD_RxDataBlock(BYTE *buff, UINT len)
 {
 	uint8_t token;
 
-	uint32_t timeCounter = HAL_GetTick() + 50;
+	uint32_t timeCounter = get_time_ms() + 50;
 
 	/* loop until receive a response or timeout */
 	do {
 		token = SPI_RxByte();
-	} while((token == 0xFF) && (timeCounter > HAL_GetTick()));
+	} while((token == 0xFF) && (timeCounter > get_time_ms()));
 
 	/* invalid response */
 	if(token != 0xFE) return FALSE;
@@ -269,7 +269,7 @@ DSTATUS SD_disk_initialize(BYTE drv)
 	{
 		/* timeout 1 sec */
 		//Timer1 = 1000;
-		timeCounter = HAL_GetTick()+1000;
+		timeCounter = get_time_ms()+1000;
 
 		/* SDC V2+ accept CMD8 command, http://elm-chan.org/docs/mmc/mmc_e.html */
 		if (SD_SendCmd(CMD8, 0x1AA) == 1)
@@ -286,7 +286,7 @@ DSTATUS SD_disk_initialize(BYTE drv)
 				/* ACMD41 with HCS bit */
 				do {
 					if (SD_SendCmd(CMD55, 0) <= 1 && SD_SendCmd(CMD41, 1UL << 30) == 0) break;
-				} while (timeCounter>HAL_GetTick());
+				} while (timeCounter>get_time_ms());
 
 				/* READ_OCR */
 				if ((timeCounter>HAL_GetTick()) && SD_SendCmd(CMD58, 0) == 0)
@@ -318,10 +318,10 @@ DSTATUS SD_disk_initialize(BYTE drv)
 					if (SD_SendCmd(CMD1, 0) == 0) break; /* CMD1 */
 				}
 
-			} while ((timeCounter>HAL_GetTick()));
+			} while ((timeCounter>get_time_ms()));
 
 			/* SET_BLOCKLEN */
-			if (!(timeCounter>HAL_GetTick()) || SD_SendCmd(CMD16, 512) != 0) type = 0;
+			if (!(timeCounter>get_time_ms()) || SD_SendCmd(CMD16, 512) != 0) type = 0;
 		}
 	}
 
@@ -336,7 +336,7 @@ DSTATUS SD_disk_initialize(BYTE drv)
 	{
 		Stat &= ~STA_NOINIT;
 
-	  HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
+	  HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4; //Fuck faut que je change ca aussi
 	  HAL_SPI_Init(HSPI_SDCARD);
 	}
 	else

@@ -6,5 +6,6 @@
 
 void systick_initial(uint16_t freq);
 void wait(uint16_t delay);
+uint32_t get_time_ms(void);
 
 #endif

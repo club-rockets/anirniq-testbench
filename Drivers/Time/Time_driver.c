@@ -8,22 +8,36 @@
 
 */
 #include "Time_driver.h"
+#include "stm32f4xx_it.h"
 
-
-
+volatile uint32_t TIMEms = 0;
 
 void systick_initial(uint16_t freq){
 
-SysTick->
+	SysTick_Config(1000); //interrupt every 1ms
 
+}
+
+void wait(uint32_t delay){
+
+	uint32_t TIMEmspic = TIMEms;
+
+	while((TIMEms - TIMEmspic) < 100);
 
 }
 
+uint32_t get_time_ms(void){
 
-void wait(uint16_t delay){
-
-
-while();
-
-
+	return TIMEmspic;
 }
+
+/**
+  * @brief  This function handles SysTick Handler.
+  * @param  None
+  * @retval None
+  */
+void SysTick_Handler(void)
+{
+	TIMEms ++; //49 days
+}
+
