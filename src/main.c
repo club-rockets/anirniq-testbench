@@ -31,6 +31,9 @@ SOFTWARE.
 #include <stdio.h>
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
+#include "Time_driver.h"
+#include "SPI2_driver.h"
+#include "fatfs_sd.h"
 
 #define DEBUG
 
@@ -62,6 +65,8 @@ int main(void)
 
 #ifdef DEBUG
 
+	systick_initial();
+
 	  /* Initialize LEDs */
 	  STM_EVAL_LEDInit(LED3);
 	  STM_EVAL_LEDInit(LED4);
@@ -69,10 +74,8 @@ int main(void)
 	  STM_EVAL_LEDInit(LED6);
 
 	  /* Turn on LEDs */
-	  STM_EVAL_LEDOn(LED3);
-	  STM_EVAL_LEDOn(LED4);
-	  STM_EVAL_LEDOn(LED5);
-	  STM_EVAL_LEDOn(LED6);
+
+
 
 #else
 	SystemCoreClockUpdate(); //update systemcore clock in case you use non-default settings
@@ -95,6 +98,14 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
+
+	  STM_EVAL_LEDOn(LED3);
+
+	  wait(500);
+
+	  STM_EVAL_LEDOff(LED3);
+
+	  wait(500);
 
   }
 }

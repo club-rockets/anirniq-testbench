@@ -10,7 +10,7 @@
 
 void spi2_initial(uint8_t baud){
 
-    RCC->APB2ENR |= RCC_APB2ENR_SPI2EN; //Enable SPI clock
+    RCC->APB1ENR |= RCC_APB1ENR_SPI2EN; //Enable SPI clock
     
     /*Enable GPIO clock for spi 1*/
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
@@ -78,7 +78,7 @@ uint8_t SPI2_Write(uint8_t *buffer, uint8_t nBytes){
 
 		while((SD_SPI->SR & SPI_SR_TXE) != SPI_SR_TXE); //Check if TX buffer empty
 		SD_SPI->DR = (uint16_t)buffer[i];
-		while((T_SPI->SR & SPI_SR_RXNE) != SPI_SR_RXNE);//Check if RX buffer is full
+		while((SD_SPI->SR & SPI_SR_RXNE) != SPI_SR_RXNE);//Check if RX buffer is full
 		buffer[i] = (uint8_t)SD_SPI->DR;
 
 	}

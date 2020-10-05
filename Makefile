@@ -69,12 +69,13 @@ src/stm32f4xx_it.c \
 src/syscalls.c \
 src/system_stm32f4xx.c \
 src/tiny_printf.c \
-Drivers/SD/LCD2_Driver.c \
+Drivers/Time/Time_driver.c \
+Drivers/SD/SPI2_driver.c \
 Drivers/SD/fatfs_sd.c \
-Middleware/ff14/ff.c \
-Middleware/ff14/ffsystem.c \
-Middleware/ff14/ffunicode.c \
-Middleware/ff14/diskio.c
+Middleware/ff14/source/ff.c \
+Middleware/ff14/source/ffsystem.c \
+Middleware/ff14/source/ffunicode.c \
+Middleware/ff14/source/diskio.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -134,6 +135,7 @@ C_INCLUDES =  \
 -ILibraries/Device/STM32F4xx/Include \
 -IUtilities/STM32F4-Discovery \
 -IDrivers/SD \
+-IDrivers/Time \
 -IMiddleware/ff14/source \
 -Isrc
 
