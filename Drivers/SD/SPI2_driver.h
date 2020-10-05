@@ -16,7 +16,7 @@
 
 /* PROTOTYPE */
 
-void spi2_initial(void);
+void spi2_initial(uint8_t baud);
 void spi2_dma_init(void);
 void spi2_send(uint8_t data);
 

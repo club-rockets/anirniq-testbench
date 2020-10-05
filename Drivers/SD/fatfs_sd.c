@@ -15,6 +15,18 @@ static uint8_t PowerFlag = 0;				/* Power flag */
  * SPI functions
  **************************************/
 
+/* slave select */
+static void SELECT(void)
+{
+	SD_CS_PORT->ODR &= ~(1<<SD_CS_PIN);
+}
+
+/* slave deselect */
+static void DESELECT(void)
+{
+	SD_CS_PORT->ODR |= (1<<SD_CS_PIN);
+}
+
 /* SPI transmit a byte */
 static void SPI_TxByte(uint8_t data)
 {
@@ -78,7 +90,7 @@ static void SD_PowerOn(void)
 
 	//HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
 	//HAL_SPI_Init(HSPI_SDCARD);
-	SPI2_initial();
+	SPI2_initial(7);
 
 	/* transmit bytes to wake up */
 	DESELECT();
@@ -336,8 +348,9 @@ DSTATUS SD_disk_initialize(BYTE drv)
 	{
 		Stat &= ~STA_NOINIT;
 
-	  HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4; //Fuck faut que je change ca aussi
-	  HAL_SPI_Init(HSPI_SDCARD);
+	  //HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4; //Fuck faut que je change ca aussi
+	  //HAL_SPI_Init(HSPI_SDCARD);
+	  SPI2_initial(1);
 	}
 	else
 	{

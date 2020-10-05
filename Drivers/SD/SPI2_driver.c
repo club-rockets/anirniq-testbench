@@ -8,7 +8,7 @@
  */
 
 
-void spi2_initial(void){
+void spi2_initial(uint8_t baud){
 
     RCC->APB2ENR |= RCC_APB2ENR_SPI2EN; //Enable SPI clock
     
@@ -34,7 +34,7 @@ void spi2_initial(void){
     SD_SPI->CR1 |= SPI_CR1_SSI; //Select software NSS
     SD_SPI->CR1 |= SPI_CR1_SSM; //Select software NSS
     SD_SPI->CR1 &= ~SPI_CR1_LSBFIRST; //Select MSB first
-    SD_SPI->CR1 |= (0b100<<3); //Baud rate /16
+    SD_SPI->CR1 |= (baud<<3); //Baud rate /16
 
     SD_SPI->CR1 &= ~SPI_CR1_CPOL; //CPOL high and CPHA on second edge
     SD_SPI->CR1 &= ~SPI_CR1_CPHA;
