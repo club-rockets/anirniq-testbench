@@ -31,6 +31,7 @@ SOFTWARE.
 #include <stdio.h>
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
+#include "valve_API.h"
 
 #include "Pression_API.h"
 

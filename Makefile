@@ -67,11 +67,8 @@ src/main.c \
 src/stm32f4xx_it.c \
 src/syscalls.c \
 src/system_stm32f4xx.c \
-src/tiny_printf.c \
-Drivers/Pression/ADC_Driver.c \
-Drivers/Pression/Pression_API.c \
-Drivers/UART/uart1.c \
-Drivers/UART/uart2.c \
+Drivers/Valve/Valve_driver.c \
+Drivers/Valve/valve_API.c
 #Drivers/SD/fatfs_sd.c
 #Drivers/loadcell/HX711.c
 
@@ -132,8 +129,7 @@ C_INCLUDES =  \
 -ILibraries/CMSIS/Include \
 -ILibraries/Device/STM32F4xx/Include \
 -IUtilities/STM32F4-Discovery \
--IDrivers/Pression \
--IDrivers/UART \
+-IDrivers/Valve \
 -Isrc
 
 
