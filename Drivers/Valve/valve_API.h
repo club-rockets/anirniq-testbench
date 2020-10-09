@@ -3,8 +3,8 @@
 
 #include <String.h>
 #include <Valve_driver.h>
-#include "uart1.h"
-#include "uart2.h"
+//#include "uart1.h"
+//#include "uart2.h"
 
 #define NB_VALVE 2
 
@@ -23,5 +23,7 @@ void v_start(API_VALVE_STRUCT* t_struct);
 void v_get(API_VALVE_STRUCT* t_struct);
 void v_lock(API_VALVE_STRUCT* t_struct);
 void v_unlock(API_VALVE_STRUCT* t_struct);
+void v_open(API_VALVE_STRUCT* t_struct);
+void v_close(API_VALVE_STRUCT* t_struct);
 
 #endif

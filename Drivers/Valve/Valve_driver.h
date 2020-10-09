@@ -9,6 +9,6 @@
 void valve_initial(void);
 void valve_open(uint8_t pin);
 void valve_close(uint8_t pin);
-uint32_t valve_getstatus(uint8_t pin);
+uint8_t valve_getstatus(uint8_t pin);
 
 #endif

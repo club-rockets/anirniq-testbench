@@ -31,6 +31,7 @@ SOFTWARE.
 #include <stdio.h>
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
+#include "valve_API.h"
 
 #define DEBUG
 
@@ -69,10 +70,32 @@ int main(void)
 	  STM_EVAL_LEDInit(LED6);
 
 	  /* Turn on LEDs */
+	  //STM_EVAL_LEDOn(LED3);
+	  //STM_EVAL_LEDOn(LED4);
+	  //STM_EVAL_LEDOn(LED5);
+	  //STM_EVAL_LEDOn(LED6);
+
+	  API_VALVE_STRUCT vlv[NB_VALVE];
+
+	  API_VALVE_STRUCT* valv1 = &vlv[0];
+	  API_VALVE_STRUCT* valv2 = &vlv[1];
+
+	  v_API_init();
+
+	  v_init(valv1,1,1);
+	  v_init(valv2,2,2);
+
+	  v_start(valv1);
+	  v_start(valv2);
+
+
+	  v_unlock(valv1);
+	  v_open(valv1);
+
+
 	  STM_EVAL_LEDOn(LED3);
-	  STM_EVAL_LEDOn(LED4);
-	  STM_EVAL_LEDOn(LED5);
-	  STM_EVAL_LEDOn(LED6);
+
+
 
 #else
 	SystemCoreClockUpdate(); //update systemcore clock in case you use non-default settings
