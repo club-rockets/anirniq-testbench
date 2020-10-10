@@ -73,13 +73,14 @@ uint8_t SPI2_ReadByte(void){
 
 uint8_t SPI2_Write(uint8_t *buffer, uint32_t nBytes){
 
+	uint8_t dummy;
 	uint32_t i;
 	for(i=0;i<nBytes;i++){
 
 		while((SD_SPI->SR & SPI_SR_TXE) != SPI_SR_TXE); //Check if TX buffer empty
 		SD_SPI->DR = (uint16_t)buffer[i];
 		while((SD_SPI->SR & SPI_SR_RXNE) != SPI_SR_RXNE);//Check if RX buffer is full
-		buffer[i] = (uint8_t)SD_SPI->DR;
+		dummy = (uint8_t)SD_SPI->DR;
 
 	}
 

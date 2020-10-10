@@ -35,6 +35,8 @@ SOFTWARE.
 #include "SPI2_driver.h"
 #include "fatfs_sd.h"
 #include "sd_API.h"
+#include "fatfs_sd.h"
+#include "string.h"
 
 #define DEBUG
 
@@ -85,6 +87,22 @@ int main(void)
 	f_printf(&USERFile,"Hello world!!");
 	volatile FRESULT resultat = f_close(&USERFile);
 
+
+SD_disk_initialize(0);
+/*
+uint8_t test_write[512];
+uint8_t test_read[512] = {0};
+memset(test_write,0XAA,512);
+
+SD_disk_write(0, test_write, 0, 1);
+SD_disk_read(0, test_read, 0, 1);
+
+for(int i = 0; i<512;i++){
+	if(test_write[i] != test_read[i]){
+		break;
+	}
+}
+*/
 #else
 
 

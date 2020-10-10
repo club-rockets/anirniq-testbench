@@ -43,7 +43,7 @@ void sd_init(void){
 	//create a new directory to avoid overwriting old data
 	uint32_t dirCounter = createDir(filePath);
 
-	snprintf(filePath,16,"/%03lu/%03lu.txt",dirCounter,++fileCounter);
+	snprintf(filePath,16,"%03lu/%03lu.txt",dirCounter,++fileCounter);
 	snprintf(directory,10,"%03lu/",dirCounter);
 	//open the new file
 	f_open(&SDFile,filePath,FA_CREATE_ALWAYS|FA_WRITE);
