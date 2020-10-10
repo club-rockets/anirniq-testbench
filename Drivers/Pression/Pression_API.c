@@ -1,15 +1,14 @@
 #include "Pression_API.h"
 
-void p_API_init(API_PRESSURE_STRUCT *t_data, uint8_t nb){
+void p_API_init(void){
 
-
+	adc_init();
 
 }
 
 void p_init(API_PRESSURE_STRUCT *t_struct, uint8_t id){
 
 	t_struct->id = id;
-	adc_init();
 
 }
 
@@ -27,28 +26,33 @@ void p_get(API_PRESSURE_STRUCT *t_struct, uint16_t data){
 
 }
 
-void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port){
+void void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port, uint8_t format){
 
-	char strdata[8];
-	char strid[8];
-	sprintf(strdata,"%d",t_struct->prsdata);
-	sprintf(strid,"%d",t_struct->id);
 
-	if(!port){
+	if(!format){
 
-		uart2_transmit("#SENSOR_NAME:",13);
-		uart2_transmit(strid,strlen(strid));
-		uart2_transmit("#DATA:",6);
-		uart2_transmit(strdata,strlen(strdata));
+		char strdata[8];
+		char strid[8];
+		sprintf(strdata,"%d",t_struct->prsdata);
+		sprintf(strid,"%d",t_struct->id);
 
-	}else{
+		if(!port){
 
-		uart1_transmit("#SENSOR_NAME:",13);
-		uart1_transmit(strid,strlen(strid));
-		uart1_transmit("#DATA:",6);
-		uart1_transmit(strdata,strlen(strdata));
+			uart2_transmit("#SENSOR_NAME:",13);
+			uart2_transmit(strid,strlen(strid));
+			uart2_transmit("#DATA:",6);
+			uart2_transmit(strdata,strlen(strdata));
 
-	}
+		}else{
+
+			uart1_transmit("#SENSOR_NAME:",13);
+			uart1_transmit(strid,strlen(strid));
+			uart1_transmit("#DATA:",6);
+			uart1_transmit(strdata,strlen(strdata));
+
+		}
+
+	}else{}
 }
 
 void p_stop(void){

@@ -13,11 +13,13 @@
 #include "uart1.h"
 #include "uart2.h"
 
-#define NB_PRESSURE 3
+#define NB_PRESSURE 2
 
 //Sending parameter
 #define GROUND 0
 #define AIR 1
+#define ASCII 0
+#define BINARY 1
 
 typedef struct _API_PRESSURE_STRUCT{ // Structure of one thermocouple
 
@@ -27,11 +29,11 @@ typedef struct _API_PRESSURE_STRUCT{ // Structure of one thermocouple
 
 } API_PRESSURE_STRUCT;
 
-void p_API_init(API_PRESSURE_STRUCT* t_data, uint8_t nb);
+void p_API_init(void);
 void p_init(API_PRESSURE_STRUCT *t_struct, uint8_t id);
 void p_start(API_PRESSURE_STRUCT *t_struct, uint16_t *data);
 void p_get(API_PRESSURE_STRUCT *t_struct, uint16_t data);
-void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port);
+void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port, uint8_t format);
 void p_stop(void);
 
 #endif

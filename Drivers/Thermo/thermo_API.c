@@ -1,11 +1,8 @@
 #include "thermo_API.h"
 
-void API_init(API_THERMO_STRUCT* t_data, uint8_t nb){
+void t_API_init(API_THERMO_STRUCT* t_data, uint8_t nb){
 
-
-
-
-
+	spi_initial();
 
 }
 

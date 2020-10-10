@@ -31,27 +31,33 @@ SOFTWARE.
 #include <stdio.h>
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
-<<<<<<< HEAD
-#include "valve_API.h"
-=======
+
 #include "Time_driver.h"
 #include "SPI2_driver.h"
 #include "fatfs_sd.h"
-#include "sd_API.h"
 #include "fatfs_sd.h"
 #include "string.h"
->>>>>>> Sd_Driver
+
 
 #include "Pression_API.h"
+#include "valve_API.h"
+#include "thermo_API.h"
+#include "sd_API.h"
 
-<<<<<<< HEAD
 #define DEBUG
-=======
+
+/**
+**===========================================================================
+**
+**  Abstract: volatile data
+**
+**===========================================================================
+*/
+
 char USERPath[4] = "sd0";
 FATFS USERFatFs;
-FIL USERFile; 
+FIL USERFile;
 
->>>>>>> Sd_Driver
 /* Private macro */
 /* Private variables */
 /* Private function prototypes */
@@ -78,86 +84,94 @@ int main(void)
   *  E.g.  SCB->VTOR = 0x20000000;  
   */
 
-#ifdef DEBUG
+	/* TEMPLATE FOR API
 
-	  uart2_init();
+	//API PRESSURE
+  	//API THERMOCOUPLE
+  	//API LOADCELL
+  	//API VALVE
+  	//API E-MATCH
+	//API SD
 
-	  __enable_irq();
+	 */
 
-	/* Initialize LEDs */
-	STM_EVAL_LEDInit(LED3);
-	STM_EVAL_LEDInit(LED4);
-	STM_EVAL_LEDInit(LED5);
-	STM_EVAL_LEDInit(LED6);
+	/* SYSTEM CLOCK INIT START*/
 
-<<<<<<< HEAD
+		SystemCoreClockUpdate();
+
+  	/* SYSTEM CLOCK INIT STOP */
+	/*-------------------------------------------*/
+	/* DRIVER INIT START*/
+
+		uart1_init();
+		uart2_init();
+
+		__enable_irq();
+
+	/* DRIVER INIT STOP*/
+	/*-------------------------------------------*/
+	/* API INIT START */
+
+		//API PRESSURE
 	  	uint16_t data[3] = {0,0,0};
 
-	  	SystemCoreClockUpdate();
-
 	  	API_PRESSURE_STRUCT pr[NB_PRESSURE];
-
 	  	API_PRESSURE_STRUCT *prs1 = &pr[0];
 	  	API_PRESSURE_STRUCT *prs2 = &pr[1];
-	  	API_PRESSURE_STRUCT *prs3 = &pr[2];
+
+	  	p_API_init(); //init the driver
+
+	  	//API THERMOCOUPLE
+	  	API_THERMO_STRUCT tr[NB_THERMO];
+	  	API_THERMO_STRUCT *tmcp1 = &tr[0];
+	  	API_THERMO_STRUCT *tmcp2 = &tr[1];
+
+	  	t_API_init(); //init the driver
+
+	  	//API LOADCELL
+
+	  	//API VALVE
+	  	API_VALVE_STRUCT vl[NB_VALVE];
+	  	API_VALVE_STRUCT *vlv1 = &vl[0];
+	  	API_VALVE_STRUCT *vlv1 = &v2[1];
+
+	  	v_API_init(); //init the driver
+
+	  	//API E-MATCH
+
+	  	//API SD
+
+
+
+	  	/* API INIT END */
+	  	/*-------------------------------------------*/
+	  	/*SENSORS AND ACTUATORS INIT START */
+
+		//PRESSURE SENSORS
 
 	  	p_init(prs1,1);
 	  	p_init(prs2,2);
-	  	p_init(prs3,3);
 
-	  	p_start(prs1,data); //Start the conversion for all value, starting from prs1
+	  	//THERMOCOUPLE SENSORS
 
-	  	p_get(prs1,data[0]);
-	  	p_get(prs2,data[1]);
-	  	p_get(prs3,data[2]);
+	  	t_init(tmcp1,3);
+	  	t_init(tmcp2,4);
 
-	  	p_send(prs1,GROUND);
-	  	p_send(prs2,GROUND);
-	  	p_send(prs3,GROUND);
-=======
-	/*CODE HERE*/
+	  	//LOADCELL SENSORS
 
-	sd_init();
+	  	//VALVE ACTUATORS
 
-	f_printf(&USERFile,"Hello world!!");
-	volatile FRESULT resultat = f_close(&USERFile);
+	  	v_init(vlv1,1,1);
+	  	v_init(vlv2,2,2);
 
-
-SD_disk_initialize(0);
-/*
-uint8_t test_write[512];
-uint8_t test_read[512] = {0};
-memset(test_write,0XAA,512);
-
-SD_disk_write(0, test_write, 0, 1);
-SD_disk_read(0, test_read, 0, 1);
-
-for(int i = 0; i<512;i++){
-	if(test_write[i] != test_read[i]){
-		break;
-	}
-}
-*/
-#else
-
->>>>>>> Sd_Driver
-
-#else
-
-<<<<<<< HEAD
-
-#endif
+	  	/*SENSORS AND ACTUATORS INIT STOP */
 
 
 
 
 
-  /* Infinite loop */
-  while (1)
-  {
-		STM_EVAL_LEDInit(LED5);
-  }
-=======
+
+
 	/* Infinite loop */
 	while (1) {
 	 	STM_EVAL_LEDOn(LED3);
@@ -166,7 +180,7 @@ for(int i = 0; i<512;i++){
 		STM_EVAL_LEDOff(LED3);
 		wait(500);
 	}
->>>>>>> Sd_Driver
+
 }
 
 /*
