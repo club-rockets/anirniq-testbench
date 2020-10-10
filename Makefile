@@ -71,6 +71,7 @@ src/system_stm32f4xx.c \
 src/tiny_printf.c \
 Drivers/Time/Time_driver.c \
 Drivers/SD/SPI2_driver.c \
+Drivers/SD/sd_API.c \
 Drivers/SD/fatfs_sd.c \
 Middleware/ff14/source/ff.c \
 Middleware/ff14/source/ffsystem.c \
@@ -196,14 +197,14 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@	
 	
 $(BUILD_DIR):
-	mkdir $@		
+	@mkdir $@		
 	@echo "\033[0;35mOh shit, here we go again\033[0m"
 
 #######################################
 # clean up
 #######################################
 clean:
-	-rm -fR $(BUILD_DIR)
+	@-rm -fR $(BUILD_DIR)
 	@echo "\033[0;32mClean as fuck\033[0m"
   
 #######################################

@@ -34,8 +34,13 @@ SOFTWARE.
 #include "Time_driver.h"
 #include "SPI2_driver.h"
 #include "fatfs_sd.h"
+#include "sd_API.h"
 
 #define DEBUG
+
+char USERPath[4] = "sd0";
+FATFS USERFatFs;
+FIL USERFile; 
 
 /* Private macro */
 /* Private variables */
@@ -67,64 +72,49 @@ int main(void)
 
 	systick_initial();
 
-	  /* Initialize LEDs */
-	  STM_EVAL_LEDInit(LED3);
-	  STM_EVAL_LEDInit(LED4);
-	  STM_EVAL_LEDInit(LED5);
-	  STM_EVAL_LEDInit(LED6);
+	/* Initialize LEDs */
+	STM_EVAL_LEDInit(LED3);
+	STM_EVAL_LEDInit(LED4);
+	STM_EVAL_LEDInit(LED5);
+	STM_EVAL_LEDInit(LED6);
 
-	  /* Turn on LEDs */
+	/*CODE HERE*/
 
+	sd_init();
 
+	f_printf(&USERFile,"Hello world!!");
+	volatile FRESULT resultat = f_close(&USERFile);
 
 #else
-	SystemCoreClockUpdate(); //update systemcore clock in case you use non-default settings
 
-	/* CONFIGURE THE CLOCK */
-	SystemClock_Config(); // Init the system clock (to be implemented)
-
-	/* SET UP THE PERIPHERICAL */
-
-	/* GPIO */
-	gpio_init(); // init all the gpio (to be implemented)
-	dma_init(); // init the DMA (to be implemented)
-
-	uart2_init(); // init uart2 peripherical
-	spi2_init(); // init spi2 peripherical (to be implemented)
-	adc_init(); // init adc peripherical (to be implemented)
 
 #endif
 
-  /* Infinite loop */
-  while (1)
-  {
+	/* Infinite loop */
+	while (1) {
+	 	STM_EVAL_LEDOn(LED3);
+		wait(500);
 
-	  STM_EVAL_LEDOn(LED3);
-
-	  wait(500);
-
-	  STM_EVAL_LEDOff(LED3);
-
-	  wait(500);
-
-  }
+		STM_EVAL_LEDOff(LED3);
+		wait(500);
+	}
 }
-
 
 /*
  * Callback used by stm32f4_discovery_audio_codec.c.
  * Refer to stm32f4_discovery_audio_codec.h for more info.
  */
-void EVAL_AUDIO_TransferComplete_CallBack(uint32_t pBuffer, uint32_t Size){
+void EVAL_AUDIO_TransferComplete_CallBack(uint32_t pBuffer, uint32_t Size)
+{
   /* TODO, implement your code here */
-
 }
 
 /*
  * Callback used by stm324xg_eval_audio_codec.c.
  * Refer to stm324xg_eval_audio_codec.h for more info.
  */
-uint16_t EVAL_AUDIO_GetSampleCallBack(void){
+uint16_t EVAL_AUDIO_GetSampleCallBack(void)
+{
   /* TODO, implement your code here */
   return -1;
 }

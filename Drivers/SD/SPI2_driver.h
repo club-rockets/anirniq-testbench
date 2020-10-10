@@ -21,8 +21,8 @@ void spi2_dma_init(void);
 void spi2_send(uint8_t data);
 
 //From MAXIM INT
-uint8_t SPI2_Write(uint8_t *buffer, uint8_t nBytes);
-uint8_t SPI2_Read(uint8_t *buffer, uint8_t nBytes);
+uint8_t SPI2_Write(uint8_t *buffer, uint32_t nBytes);
+uint8_t SPI2_Read(uint8_t *buffer, uint32_t nBytes);
 uint8_t SPI2_WriteByte(uint8_t data);
 uint8_t SPI2_ReadByte(void);
 void Set_DRDY_Pin_INPUT(void);

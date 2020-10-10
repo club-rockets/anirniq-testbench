@@ -37,7 +37,7 @@ static void SPI_TxByte(uint8_t data)
 /* SPI transmit buffer */
 static void SPI_TxBuffer(uint8_t *buffer, uint16_t len)
 {
-	SPI2_Write(buffer,(uint8_t)len);
+	SPI2_Write(buffer,(uint16_t)len);
 	//HAL_SPI_Transmit(HSPI_SDCARD,buffer,len,1000);
 }
 
@@ -90,7 +90,7 @@ static void SD_PowerOn(void)
 
 	//HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
 	//HAL_SPI_Init(HSPI_SDCARD);
-	SPI2_initial(7);
+	spi2_initial(7);
 
 	/* transmit bytes to wake up */
 	DESELECT();
@@ -301,7 +301,7 @@ DSTATUS SD_disk_initialize(BYTE drv)
 				} while (timeCounter>get_time_ms());
 
 				/* READ_OCR */
-				if ((timeCounter>HAL_GetTick()) && SD_SendCmd(CMD58, 0) == 0)
+				if ((timeCounter>get_time_ms()) && SD_SendCmd(CMD58, 0) == 0)
 				{
 					/* Check CCS bit */
 					for (n = 0; n < 4; n++)
@@ -350,7 +350,7 @@ DSTATUS SD_disk_initialize(BYTE drv)
 
 	  //HSPI_SDCARD->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4; //Fuck faut que je change ca aussi
 	  //HAL_SPI_Init(HSPI_SDCARD);
-	  SPI2_initial(1);
+	  spi2_initial(1);
 	}
 	else
 	{
@@ -463,7 +463,7 @@ DRESULT SD_disk_write(BYTE pdrv, const BYTE* buff, DWORD sector, UINT count)
 
 	return count ? RES_ERROR : RES_OK;
 }
-#endif /* _USE_WRITE */
+#endif
 
 /* ioctl */
 DRESULT SD_disk_ioctl(BYTE drv, BYTE ctrl, void *buff)

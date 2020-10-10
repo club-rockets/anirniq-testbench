@@ -1,8 +1,8 @@
-#ifndef SD_DRIVER_H
-#define SD_DRIVER_H
+#ifndef SD_API_H
+#define SD_API_H
 
 #include "stdint.h"
-#include "fatfs_driver.h"
+#include "fatfs_sd.h"
 
 #define SD_QUEUE_SIZE 30
 #define SD_QUEUE_BLOCK_SIZE sizeof(struct sd_log)
@@ -14,4 +14,4 @@ FIL* sd_getFile();
 
 char* sd_getDirectory();
 
-#endif //SD_DRIVER_H
+#endif //SD_API_H

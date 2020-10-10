@@ -1,4 +1,4 @@
-#include "sd_driver.h"
+#include "sd_API.h"
 #include "fatfs_sd.h"
 
 #include <stdio.h>
@@ -43,7 +43,7 @@ void sd_init(void){
 	//create a new directory to avoid overwriting old data
 	uint32_t dirCounter = createDir(filePath);
 
-	snprintf(filePath,16,"%03lu/%03lu.txt",dirCounter,++fileCounter);
+	snprintf(filePath,16,"/%03lu/%03lu.txt",dirCounter,++fileCounter);
 	snprintf(directory,10,"%03lu/",dirCounter);
 	//open the new file
 	f_open(&SDFile,filePath,FA_CREATE_ALWAYS|FA_WRITE);
@@ -59,7 +59,7 @@ uint32_t createDir(char* path){
 		do{
 			dirCounter += 1;
 			//check if 00x directory already exist
-			sprintf(path,"%03lu",dirCounter);
+			snprintf(path,16,"%03lu",dirCounter);
 			fatStatus = f_stat(path,0);
 		}while( fatStatus == FR_OK && dirCounter <= 999);
 

@@ -71,9 +71,9 @@ uint8_t SPI2_ReadByte(void){
 
 }
 
-uint8_t SPI2_Write(uint8_t *buffer, uint8_t nBytes){
+uint8_t SPI2_Write(uint8_t *buffer, uint32_t nBytes){
 
-	uint8_t i;
+	uint32_t i;
 	for(i=0;i<nBytes;i++){
 
 		while((SD_SPI->SR & SPI_SR_TXE) != SPI_SR_TXE); //Check if TX buffer empty
@@ -86,9 +86,9 @@ uint8_t SPI2_Write(uint8_t *buffer, uint8_t nBytes){
 	return 0;
 }
 
-uint8_t SPI2_Read(uint8_t *buffer, uint8_t nBytes){
+uint8_t SPI2_Read(uint8_t *buffer, uint32_t nBytes){
 
-	uint8_t i;
+	uint32_t i;
 
 	  for(i=0;i<nBytes;i++){
 
