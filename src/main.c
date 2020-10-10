@@ -31,11 +31,27 @@ SOFTWARE.
 #include <stdio.h>
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
+<<<<<<< HEAD
 #include "valve_API.h"
+=======
+#include "Time_driver.h"
+#include "SPI2_driver.h"
+#include "fatfs_sd.h"
+#include "sd_API.h"
+#include "fatfs_sd.h"
+#include "string.h"
+>>>>>>> Sd_Driver
 
 #include "Pression_API.h"
 
+<<<<<<< HEAD
 #define DEBUG
+=======
+char USERPath[4] = "sd0";
+FATFS USERFatFs;
+FIL USERFile; 
+
+>>>>>>> Sd_Driver
 /* Private macro */
 /* Private variables */
 /* Private function prototypes */
@@ -68,12 +84,13 @@ int main(void)
 
 	  __enable_irq();
 
-	  /* Initialize LEDs */
-	  STM_EVAL_LEDInit(LED3);
-	  STM_EVAL_LEDInit(LED4);
-	  STM_EVAL_LEDInit(LED5);
-	  STM_EVAL_LEDInit(LED6);
+	/* Initialize LEDs */
+	STM_EVAL_LEDInit(LED3);
+	STM_EVAL_LEDInit(LED4);
+	STM_EVAL_LEDInit(LED5);
+	STM_EVAL_LEDInit(LED6);
 
+<<<<<<< HEAD
 	  	uint16_t data[3] = {0,0,0};
 
 	  	SystemCoreClockUpdate();
@@ -97,9 +114,37 @@ int main(void)
 	  	p_send(prs1,GROUND);
 	  	p_send(prs2,GROUND);
 	  	p_send(prs3,GROUND);
+=======
+	/*CODE HERE*/
+
+	sd_init();
+
+	f_printf(&USERFile,"Hello world!!");
+	volatile FRESULT resultat = f_close(&USERFile);
+
+
+SD_disk_initialize(0);
+/*
+uint8_t test_write[512];
+uint8_t test_read[512] = {0};
+memset(test_write,0XAA,512);
+
+SD_disk_write(0, test_write, 0, 1);
+SD_disk_read(0, test_read, 0, 1);
+
+for(int i = 0; i<512;i++){
+	if(test_write[i] != test_read[i]){
+		break;
+	}
+}
+*/
+#else
+
+>>>>>>> Sd_Driver
 
 #else
 
+<<<<<<< HEAD
 
 #endif
 
@@ -112,22 +157,33 @@ int main(void)
   {
 		STM_EVAL_LEDInit(LED5);
   }
+=======
+	/* Infinite loop */
+	while (1) {
+	 	STM_EVAL_LEDOn(LED3);
+		wait(500);
+
+		STM_EVAL_LEDOff(LED3);
+		wait(500);
+	}
+>>>>>>> Sd_Driver
 }
 
 /*
  * Callback used by stm32f4_discovery_audio_codec.c.
  * Refer to stm32f4_discovery_audio_codec.h for more info.
  */
-void EVAL_AUDIO_TransferComplete_CallBack(uint32_t pBuffer, uint32_t Size){
+void EVAL_AUDIO_TransferComplete_CallBack(uint32_t pBuffer, uint32_t Size)
+{
   /* TODO, implement your code here */
-
 }
 
 /*
  * Callback used by stm324xg_eval_audio_codec.c.
  * Refer to stm324xg_eval_audio_codec.h for more info.
  */
-uint16_t EVAL_AUDIO_GetSampleCallBack(void){
+uint16_t EVAL_AUDIO_GetSampleCallBack(void)
+{
   /* TODO, implement your code here */
   return -1;
 }

@@ -12,22 +12,20 @@
 
 volatile uint32_t TIMEms = 0;
 
-void systick_initial(void){
-
+void systick_initial(void)
+{
 	SysTick_Config(SystemCoreClock/1000); //interrupt every 1ms
-
 }
 
-void wait(uint32_t delay){
-
+void wait(uint32_t delay)
+{
 	uint32_t TIMEmspic = TIMEms;
 
 	while((TIMEms - TIMEmspic) < delay);
-
 }
 
-uint32_t get_time_ms(void){
-
+uint32_t get_time_ms(void)
+{
 	return TIMEms;
 }
 
