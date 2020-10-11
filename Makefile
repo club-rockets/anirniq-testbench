@@ -67,22 +67,25 @@ src/main.c \
 src/stm32f4xx_it.c \
 src/syscalls.c \
 src/system_stm32f4xx.c \
-<<<<<<< HEAD
-Drivers/Valve/Valve_driver.c \
-Drivers/Valve/valve_API.c
-#Drivers/SD/fatfs_sd.c
-#Drivers/loadcell/HX711.c
-=======
 src/tiny_printf.c \
+Drivers/Pression/ADC_Driver.c \
+Drivers/Pression/Pression_API.c \
+Drivers/Thermo/MAX31856drv.c \
+Drivers/Thermo/SPI_driver.c \
+Drivers/Thermo/thermo_API.c \
 Drivers/Time/Time_driver.c \
+Drivers/UART/uart1.c \
+Drivers/UART/uart2.c \
+Drivers/Valve/valve_API.c \
+Drivers/Valve/Valve_driver.c \
 Drivers/SD/SPI2_driver.c \
 Drivers/SD/sd_API.c \
 Drivers/SD/fatfs_sd.c \
 Middleware/ff14/source/ff.c \
 Middleware/ff14/source/ffsystem.c \
 Middleware/ff14/source/ffunicode.c \
-Middleware/ff14/source/diskio.c
->>>>>>> Sd_Driver
+Middleware/ff14/source/diskio.c \
+ds/dataBuffer.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -141,7 +144,14 @@ C_INCLUDES =  \
 -ILibraries/CMSIS/Include \
 -ILibraries/Device/STM32F4xx/Include \
 -IUtilities/STM32F4-Discovery \
+-IDrivers/Pression \
+-IDrivers/SD \
+-IDrivers/Thermo \
+-IDrivers/Time \
+-IDrivers/UART \
 -IDrivers/Valve \
+-IMiddleware/ff14/source \
+-Ids \
 -Isrc
 
 

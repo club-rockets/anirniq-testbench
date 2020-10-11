@@ -1,6 +1,6 @@
 #include "thermo_API.h"
 
-void t_API_init(API_THERMO_STRUCT* t_data, uint8_t nb){
+void t_API_init(void){
 
 	spi_initial();
 
@@ -8,9 +8,9 @@ void t_API_init(API_THERMO_STRUCT* t_data, uint8_t nb){
 
 
 
-void t_init(API_THERMO_STRUCT *t_struct, char* name){
+void t_init(API_THERMO_STRUCT *t_struct, uint8_t id){
 
-		strcpy(t_struct->name,name); //init Thermo name
+		t_struct->id = id; //init Thermo name
 		NSS_PIN = t_struct->pin; //Pass thermo pin
 		maxim_31856_init(); //init the driver
 

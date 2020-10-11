@@ -10,6 +10,8 @@
 
 /****** Define *****/
 
+#define XML_NODE 6
+
 #define DATA_BUFFER_ITEM_NB 10
 
 #define DATA_BUFFER_DEBUG
@@ -23,7 +25,7 @@
 
 typedef struct _DataBuffer_Data_Element {
 
-    void*       adr;
+    void* 		adr;
     uint8_t     nb;
     uint8_t     type;
 
@@ -51,9 +53,9 @@ typedef struct _DataBuffer {
 
 #define dataBuffer debug0_data_buffer*/
 
-void init(DataBuffer *buffer, uint32_t len);   // Initialisation du buffer circulaire
+void init(DataBuffer *buffer, uint8_t len);   // Initialisation du buffer circulaire
 void free(DataBuffer *buffer);   // Suppress all data in the buffer and reinit it
-uint8_t put(DataBuffer *buffer, uint32_t *data_address, size_t size); //Add data to the buffer
+uint8_t put(DataBuffer *buffer, DataBuffer_Element newData); //Add data to the buffer
 DataBuffer_Element get(DataBuffer *buffer); //Read head value
 uint8_t capacity(DataBuffer *buffer); //Give remaning space
 uint8_t size(DataBuffer *buffer); //Give number of element in it

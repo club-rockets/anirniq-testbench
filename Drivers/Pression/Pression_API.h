@@ -9,6 +9,7 @@
 #define PRESSION_API_H_
 
 #include <String.h>
+#include "dataBuffer.h"
 #include "ADC_Driver.h"
 #include "uart1.h"
 #include "uart2.h"
@@ -35,5 +36,6 @@ void p_start(API_PRESSURE_STRUCT *t_struct, uint16_t *data);
 void p_get(API_PRESSURE_STRUCT *t_struct, uint16_t data);
 void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port, uint8_t format);
 void p_stop(void);
+uint8_t p_push(API_PRESSURE_STRUCT *t_struct, DataBuffer *buffer);
 
 #endif

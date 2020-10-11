@@ -1,7 +1,7 @@
 #include "dataBuffer.h"
 
 //La fonction initialise un buffer circulaire vide
-void initialisation(DataBuffer *buffer, uint32_t len){
+void init(DataBuffer *buffer, uint8_t len){
 
     uint8_t i;
 
@@ -122,16 +122,16 @@ DataBuffer_Element get(DataBuffer *buffer){
 }
 
  //Put tail value
-uint8_t put(DataBuffer *buffer, uint32_t *data_address, size_t size){
+uint8_t put(DataBuffer *buffer, DataBuffer_Element newData){
 
     //if not empty
     if(!full(buffer)){
 
-        buffer->item[buffer->head].data.adr = NULL;
-        buffer->item[buffer->head].data.nb = 0;
-        buffer->item[buffer->head].data.type = 0;
-        buffer->item[buffer->head].id = 0;
-        buffer->item[buffer->head].node = 0;
+        buffer->item[buffer->head].data.adr = newData.data.adr;
+        buffer->item[buffer->head].data.nb = newData.data.nb;
+        buffer->item[buffer->head].data.type = newData.data.type;
+        buffer->item[buffer->head].id = newData.id;
+        buffer->item[buffer->head].node = newData.node;
 
         buffer->head = (buffer->head+1)%(buffer->lenght);
 

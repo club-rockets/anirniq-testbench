@@ -26,7 +26,7 @@ void p_get(API_PRESSURE_STRUCT *t_struct, uint16_t data){
 
 }
 
-void void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port, uint8_t format){
+void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port, uint8_t format){
 
 
 	if(!format){
@@ -58,5 +58,20 @@ void void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port, uint8_t format){
 void p_stop(void){
 
 	adc_power(0);
+
+}
+
+uint8_t p_push(API_PRESSURE_STRUCT *t_struct, DataBuffer *buffer){
+
+	DataBuffer_Element newData;
+
+	newData.node = XML_NODE;
+	newData.id = t_struct->id;
+
+	newData.data.adr = &(t_struct->prsdata);
+	newData.data.nb = 1;
+	newData.data.type = sizeof(t_struct->prsdata);
+
+	return put(buffer, newData);
 
 }

@@ -29,6 +29,7 @@ SOFTWARE.
 
 /* Includes */
 #include <stdio.h>
+#include <string.h>
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
 
@@ -36,8 +37,6 @@ SOFTWARE.
 #include "SPI2_driver.h"
 #include "fatfs_sd.h"
 #include "fatfs_sd.h"
-#include "string.h"
-
 
 #include "Pression_API.h"
 #include "valve_API.h"
@@ -94,15 +93,28 @@ int main(void)
 	//API SD
 
 	 */
+		DataBuffer debug0_data_buffer;
+		DataBuffer* dataBuffer = &debug0_data_buffer;
 
 	/* SYSTEM CLOCK INIT START*/
 
-		SystemCoreClockUpdate();
+		//SystemCoreClockUpdate();
+
+
+		#ifdef DEBUG
+
+			STM_EVAL_LEDInit(LED3);
+
+		#endif
+
+
+
 
   	/* SYSTEM CLOCK INIT STOP */
 	/*-------------------------------------------*/
 	/* DRIVER INIT START*/
 
+		systick_initial();
 		uart1_init();
 		uart2_init();
 
@@ -113,7 +125,8 @@ int main(void)
 	/* API INIT START */
 
 		//API PRESSURE
-	  	uint16_t data[3] = {0,0,0};
+	  	uint16_t data[NB_PRESSURE];
+	  	memset(data,0,sizeof(data));
 
 	  	API_PRESSURE_STRUCT pr[NB_PRESSURE];
 	  	API_PRESSURE_STRUCT *prs1 = &pr[0];
@@ -133,15 +146,13 @@ int main(void)
 	  	//API VALVE
 	  	API_VALVE_STRUCT vl[NB_VALVE];
 	  	API_VALVE_STRUCT *vlv1 = &vl[0];
-	  	API_VALVE_STRUCT *vlv1 = &v2[1];
+	  	API_VALVE_STRUCT *vlv2 = &vl[1];
 
 	  	v_API_init(); //init the driver
 
 	  	//API E-MATCH
 
 	  	//API SD
-
-
 
 	  	/* API INIT END */
 	  	/*-------------------------------------------*/
@@ -165,20 +176,35 @@ int main(void)
 	  	v_init(vlv2,2,2);
 
 	  	/*SENSORS AND ACTUATORS INIT STOP */
+	  	/*-------------------------------------------*/
+		/* DATA BUFFER INIT START*/
+
+		init(dataBuffer,DATA_BUFFER_ITEM_NB);
+
+		/* DATA BUFFER INIT END*/
+	  	/*-------------------------------------------*/
+	  	/*SENSORS AND ACTUATORS START */
+
+		p_start(prs1,data);
+		p_get(prs1,data[0]);
+
+		p_push(prs1,dataBuffer);
 
 
 
-
-
-
+	  	/*SENSORS AND ACTUATORS STOP */
 
 	/* Infinite loop */
 	while (1) {
+
+		#ifdef DEBUG
+
 	 	STM_EVAL_LEDOn(LED3);
 		wait(500);
 
 		STM_EVAL_LEDOff(LED3);
 		wait(500);
+		#endif
 	}
 
 }
