@@ -125,8 +125,8 @@ int main(void)
 	/* API INIT START */
 
 		//API PRESSURE
-	  	uint16_t data[NB_PRESSURE];
-	  	memset(data,0,sizeof(data));
+	  	volatile uint16_t ADC_DMA_dataBuffer[NB_PRESSURE];
+	  	memset(data,0,sizeof(ADC_DMA_dataBuffer));
 
 	  	API_PRESSURE_STRUCT pr[NB_PRESSURE];
 	  	API_PRESSURE_STRUCT *prs1 = &pr[0];
@@ -186,7 +186,7 @@ int main(void)
 	  	/*SENSORS AND ACTUATORS START */
 
 		p_start(prs1,data);
-		p_get(prs1,data[0]);
+		p_get(prs1,ADC_DMA_dataBuffer[0]);
 
 		p_push(prs1,dataBuffer);
 
