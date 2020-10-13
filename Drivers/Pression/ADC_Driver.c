@@ -24,7 +24,7 @@ void adc_init(void){
 	RCC->CFGR |= ADC_DIV_2_PRESCALER; //Prescaler division by 2
 
 	P_ADC->CR1 |= RESOLUTION | (1<<8); // Set the resolution of the ADC to 12 bits
-	P_ADC->CR2 |= (1<<9) | (1<<8);
+	P_ADC->CR2 |= (1<<9) | (1<<8) | ADC_CR2_CONT; //Continuous conversion
 
 	//P_ADC->SMPR2 |= P1_SAMPLE | P2_SAMPLE | P3_SAMPLE; // Set the sample time to 3 cycles
 

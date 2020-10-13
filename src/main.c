@@ -34,9 +34,6 @@ SOFTWARE.
 #include "stm32f4_discovery.h"
 
 #include "Time_driver.h"
-#include "SPI2_driver.h"
-#include "fatfs_sd.h"
-#include "fatfs_sd.h"
 
 #include "Pression_API.h"
 #include "valve_API.h"
@@ -108,7 +105,7 @@ int main(void)
 
 		#endif
 
-
+			DataBuffer_Element debug0_pressure_test;
 
 
   	/* SYSTEM CLOCK INIT STOP */
@@ -203,8 +200,13 @@ int main(void)
 		wait(500);
 
 #ifdef DEBUG_PRESSURE
-		p_push(prs1,dataBuffer);
-		p_push(prs2,dataBuffer);
+		//p_push(prs1,dataBuffer);
+		//p_push(prs2,dataBuffer);
+
+
+		//debug0_pressure_test = get(dataBuffer);
+
+		// uint16_t *data_test  = debug0_pressure_test.data.adr;
 #endif
 
 		STM_EVAL_LEDOff(LED3);
