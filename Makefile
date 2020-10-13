@@ -63,6 +63,7 @@ Libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.c \
 Utilities/STM32F4-Discovery/stm32f4_discovery.c \
 Utilities/STM32F4-Discovery/stm32f4_discovery_audio_codec.c \
 Utilities/STM32F4-Discovery/stm32f4_discovery_lis302dl.c \
+../anirniq/shared/interfaces/radio/radio_packet.c \
 src/main.c \
 src/stm32f4xx_it.c \
 src/syscalls.c \
@@ -152,6 +153,7 @@ C_INCLUDES =  \
 -IDrivers/Valve \
 -IMiddleware/ff14/source \
 -Ids \
+-I../anirniq/shared/interfaces/radio \
 -Isrc
 
 

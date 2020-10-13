@@ -25,15 +25,13 @@
 typedef struct _API_PRESSURE_STRUCT{ // Structure of one thermocouple
 
   uint8_t		id;
-  uint32_t       *data;
-  uint16_t		prsdata;
+  uint16_t       *data;
 
 } API_PRESSURE_STRUCT;
 
 void p_API_init(void);
-void p_init(API_PRESSURE_STRUCT *t_struct, uint8_t id);
-void p_start(API_PRESSURE_STRUCT *t_struct, uint16_t *data);
-void p_get(API_PRESSURE_STRUCT *t_struct, uint16_t data);
+void p_init(API_PRESSURE_STRUCT *t_struct, uint8_t id, uint16_t *adr);
+void p_start(uint16_t *data);
 void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port, uint8_t format);
 void p_stop(void);
 uint8_t p_push(API_PRESSURE_STRUCT *t_struct, DataBuffer *buffer);
