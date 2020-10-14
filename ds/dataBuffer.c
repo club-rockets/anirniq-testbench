@@ -121,6 +121,16 @@ DataBuffer_Element get(DataBuffer *buffer){
     return value;
 }
 
+//Read tail value
+DataBuffer_Element bufferfetch(DataBuffer *buffer, uint8_t bufferid){
+
+   DataBuffer_Element value;
+
+   value = buffer->item[bufferid];
+
+   return value;
+}
+
  //Put tail value
 uint8_t put(DataBuffer *buffer, DataBuffer_Element newData){
 

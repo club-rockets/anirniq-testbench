@@ -56,7 +56,8 @@ typedef struct _DataBuffer {
 void init(DataBuffer *buffer, uint8_t len);   // Initialisation du buffer circulaire
 void free(DataBuffer *buffer);   // Suppress all data in the buffer and reinit it
 uint8_t put(DataBuffer *buffer, DataBuffer_Element newData); //Add data to the buffer
-DataBuffer_Element get(DataBuffer *buffer); //Read head value
+DataBuffer_Element get(DataBuffer *buffer); //Read head value and destroy the value
+DataBuffer_Element bufferfetch(DataBuffer *buffer, uint8_t bufferid); //not destructive
 uint8_t capacity(DataBuffer *buffer); //Give remaning space
 uint8_t size(DataBuffer *buffer); //Give number of element in it
 uint8_t empty(DataBuffer *buffer); // check if buffer empty

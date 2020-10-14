@@ -81,23 +81,14 @@ int main(void)
   *  E.g.  SCB->VTOR = 0x20000000;  
   */
 
-	/* TEMPLATE FOR API
 
-	//API PRESSURE
-  	//API THERMOCOUPLE
-  	//API LOADCELL
-  	//API VALVE
-  	//API E-MATCH
-	//API SD
-
-	 */
+  	/* DATABUFFER INIT START */
+	/*-------------------------------------------*/
 		DataBuffer debug0_data_buffer;
 		DataBuffer* dataBuffer = &debug0_data_buffer;
-
+	/* DATABUFFER INIT START */
+	/*-------------------------------------------*/
 	/* SYSTEM CLOCK INIT START*/
-
-		//SystemCoreClockUpdate();
-
 
 		#ifdef DEBUG
 
@@ -105,7 +96,7 @@ int main(void)
 
 		#endif
 
-			DataBuffer_Element debug0_pressure_test;
+			//Leave empty for default clock inititalisation
 
 
   	/* SYSTEM CLOCK INIT STOP */
@@ -121,7 +112,7 @@ int main(void)
 	/* DRIVER INIT STOP*/
 	/*-------------------------------------------*/
 	/* API INIT START */
-#ifdef DEBUG_PRESSURE
+
 		//API PRESSURE
 	  	uint16_t ADC_DMA_dataBuffer[NB_PRESSURE];
 	  	memset(ADC_DMA_dataBuffer,0,sizeof(ADC_DMA_dataBuffer));
@@ -131,87 +122,80 @@ int main(void)
 	  	API_PRESSURE_STRUCT *prs2 = &pr[1];
 
 	  	p_API_init(); //init the driver
-#endif
 
-#ifdef DEBUG_THERMOCOUPLE
+
+
 	  	//API THERMOCOUPLE
 	  	API_THERMO_STRUCT tr[NB_THERMO];
 	  	API_THERMO_STRUCT *tmcp1 = &tr[0];
 	  	API_THERMO_STRUCT *tmcp2 = &tr[1];
 
 	  	t_API_init(); //init the driver
-#endif
+
 	  	//API LOADCELL
-#ifdef DEBUG_VALVE
+
 	  	//API VALVE
 	  	API_VALVE_STRUCT vl[NB_VALVE];
 	  	API_VALVE_STRUCT *vlv1 = &vl[0];
 	  	API_VALVE_STRUCT *vlv2 = &vl[1];
 
 	  	v_API_init(); //init the driver
-#endif
+
 	  	//API E-MATCH
 
 	  	//API SD
 
-	  	/* API INIT END */
-	  	/*-------------------------------------------*/
-	  	/*SENSORS AND ACTUATORS INIT START */
+	  /* API INIT END */
+	  /*-------------------------------------------*/
+	  /*SENSORS AND ACTUATORS INIT START */
 
 		//PRESSURE SENSORS
-#ifdef DEBUG_PRESSURE
+
 	  	p_init(prs1,1,ADC_DMA_dataBuffer);
 	  	p_init(prs2,2,ADC_DMA_dataBuffer+1);
-#endif
 
-#ifdef DEBUG_THERMOCOUPLE
+
+
 	  	//THERMOCOUPLE SENSORS
 
 	  	t_init(tmcp1,3);
 	  	t_init(tmcp2,4);
-#endif
+
 	  	//LOADCELL SENSORS
 
 	  	//VALVE ACTUATORS
-#ifdef DEBUG_VALVE
+
 	  	v_init(vlv1,1,1);
 	  	v_init(vlv2,2,2);
-#endif
-	  	/*SENSORS AND ACTUATORS INIT STOP */
-	  	/*-------------------------------------------*/
-		/* DATA BUFFER INIT START*/
+
+	  /*SENSORS AND ACTUATORS INIT STOP */
+	  /*-------------------------------------------*/
+	  /* DATA BUFFER INIT START*/
 
 		init(dataBuffer,DATA_BUFFER_ITEM_NB);
 
-		/* DATA BUFFER INIT END*/
-	  	/*-------------------------------------------*/
-	  	/*SENSORS AND ACTUATORS START */
-#ifdef DEBUG_PRESSURE
+	  /* DATA BUFFER INIT END*/
+	  /*-------------------------------------------*/
+	  /*SENSORS AND ACTUATORS START */
+
 		p_start(ADC_DMA_dataBuffer);
-#endif
-	  	/*SENSORS AND ACTUATORS STOP */
 
-	/* Infinite loop */
+	  /*SENSORS AND ACTUATORS STOP */
+
+
+		//PUSH ALL THE SENSORS TO THE TEST
+		p_push(prs1,dataBuffer);
+		p_push(prs2,dataBuffer);
+
+
+	/* Start the test */
 	while (1) {
-
-#ifdef DEBUG
 
 	 	STM_EVAL_LEDOn(LED3);
 		wait(500);
-
-#ifdef DEBUG_PRESSURE
-		//p_push(prs1,dataBuffer);
-		//p_push(prs2,dataBuffer);
-
-
-		//debug0_pressure_test = get(dataBuffer);
-
-		// uint16_t *data_test  = debug0_pressure_test.data.adr;
-#endif
-
 		STM_EVAL_LEDOff(LED3);
 		wait(500);
-#endif
+
 	}
 }
 
