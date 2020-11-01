@@ -63,24 +63,24 @@ Libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.c \
 Utilities/STM32F4-Discovery/stm32f4_discovery.c \
 Utilities/STM32F4-Discovery/stm32f4_discovery_audio_codec.c \
 Utilities/STM32F4-Discovery/stm32f4_discovery_lis302dl.c \
-../anirniq/shared/interfaces/radio/radio_packet.c \
+../anirniq-shared/interfaces/radio/radio_packet.c \
 src/main.c \
 src/stm32f4xx_it.c \
 src/syscalls.c \
 src/system_stm32f4xx.c \
 src/tiny_printf.c \
 Drivers/Pression/ADC_Driver.c \
-Drivers/Pression/Pression_API.c \
+api/Pression/Pression_API.c \
 Drivers/Thermo/MAX31856drv.c \
 Drivers/Thermo/SPI_driver.c \
-Drivers/Thermo/thermo_API.c \
+api/Thermo/thermo_API.c \
 Drivers/Time/Time_driver.c \
 Drivers/UART/uart1.c \
 Drivers/UART/uart2.c \
-Drivers/Valve/valve_API.c \
+api/Valve/valve_API.c \
 Drivers/Valve/Valve_driver.c \
 Drivers/SD/SPI2_driver.c \
-Drivers/SD/sd_API.c \
+api/SD/sd_API.c \
 Drivers/SD/fatfs_sd.c \
 Middleware/ff14/source/ff.c \
 Middleware/ff14/source/ffsystem.c \
@@ -151,9 +151,17 @@ C_INCLUDES =  \
 -IDrivers/Time \
 -IDrivers/UART \
 -IDrivers/Valve \
+-Iapi/Pression \
+-Iapi/SD \
+-Iapi/Thermo \
+-Iapi/Time \
+-Iapi/UART \
+-Iapi/Valve \
 -IMiddleware/ff14/source \
 -Ids \
--I../anirniq/shared/interfaces/radio \
+-Iinc \
+-I../anirniq-shared/interfaces \
+-I../anirniq-shared/interfaces/radio \
 -Isrc
 
 

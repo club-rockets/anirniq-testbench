@@ -14,4 +14,6 @@ FIL* sd_getFile();
 
 char* sd_getDirectory();
 
+UINT sd_write(void* data, size_t size);
+
 #endif //SD_API_H

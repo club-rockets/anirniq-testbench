@@ -35,8 +35,8 @@ SOFTWARE.
 
 #include "Time_driver.h"
 #include "SPI2_driver.h"
-#include "fatfs_sd.h"
-#include "fatfs_sd.h"
+
+#include "project_setup.h"
 
 #include "Pression_API.h"
 #include "valve_API.h"
@@ -109,8 +109,6 @@ int main(void)
 		#endif
 
 
-
-
   	/* SYSTEM CLOCK INIT STOP */
 	/*-------------------------------------------*/
 	/* DRIVER INIT START*/
@@ -123,7 +121,28 @@ int main(void)
 
 	/* DRIVER INIT STOP*/
 	/*-------------------------------------------*/
+	/*SD FILE INIT START*/
+
+		sd_init();
+
+		//SAVE HEADER OF DATA
+		uint8_t data_test[26] = DATAFILE_HEADER_TEST_OPERATOR;
+		sd_write(data_test,26);
+
+		data_test[0] = DATAFILE_HEADER_DATE_DAY;
+		sd_write(data_test,1);
+
+		data_test[0] = DATAFILE_HEADER_DATE_MONTH;
+		sd_write(data_test,1);
+
+		data_test[0] = DATAFILE_HEADER_DATE_YEAR;
+		sd_write(data_test,1);
+
+
+	/*SD FILE STOP*/
+	/*-------------------------------------------*/
 	/* API INIT START */
+
 #ifdef DEBUG_PRESSURE
 		//API PRESSURE
 	  	uint16_t ADC_DMA_dataBuffer[NB_PRESSURE];
@@ -193,6 +212,7 @@ int main(void)
 		p_start(ADC_DMA_dataBuffer);
 #endif
 	  	/*SENSORS AND ACTUATORS STOP */
+
 
 	/* Infinite loop */
 	while (1) {
