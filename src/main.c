@@ -123,6 +123,9 @@ int main(void)
 	/*-------------------------------------------*/
 	/*SD FILE INIT START*/
 
+		uint32_t unix_time = 0;
+		uint16_t daq_frequency = 1000;
+
 		sd_init();
 
 		//SAVE HEADER OF DATA
@@ -137,6 +140,10 @@ int main(void)
 
 		data_test[0] = DATAFILE_HEADER_DATE_YEAR;
 		sd_write(data_test,1);
+
+		sd_write(&unix_time,4);
+
+		sd_write(&daq_frequency,2);
 
 
 	/*SD FILE STOP*/

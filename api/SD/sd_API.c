@@ -44,12 +44,12 @@ void sd_init(void){
 	//create a new directory to avoid overwriting old data
 	uint32_t dirCounter = createDir(filePath);
 
-	snprintf(filePath,16,"Acquisition_%03lu/%03lu.txt",dirCounter,++fileCounter);
-	snprintf(directory,10,"Acquisition_%03lu/",dirCounter);
+	snprintf(filePath,16,"%03lu/%03lu.raf",dirCounter,++fileCounter);
+	snprintf(directory,10,"%03lu/",dirCounter);
 	//open the new file
 	f_open(&SDFile,filePath,FA_CREATE_ALWAYS|FA_WRITE);
 
-	f_write(&SDFile,"COUCOU",6,NULL);
+	//f_write(&SDFile,"COUCOU",6,NULL);
 
 	f_sync(&SDFile);
 }
