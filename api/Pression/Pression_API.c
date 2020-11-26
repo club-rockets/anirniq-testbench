@@ -1,4 +1,5 @@
 #include "Pression_API.h"
+#include "sd_API.h"
 
 void p_API_init(void){
 
@@ -66,6 +67,8 @@ uint8_t p_push(API_PRESSURE_STRUCT *t_struct, DataBuffer *buffer){
 	newData.data.adr = t_struct->data;
 	newData.data.nb = 1;
 	newData.data.type = sizeof(*(t_struct->data));
+
+	sd_write(&t_struct->id,1);
 
 	return put(buffer, newData);
 

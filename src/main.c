@@ -128,22 +128,22 @@ int main(void)
 
 		sd_init();
 
+
+
+		// void log_create();
 		//SAVE HEADER OF DATA
 		uint8_t data_test[26] = DATAFILE_HEADER_TEST_OPERATOR;
 		sd_write(data_test,26);
 
-		data_test[0] = DATAFILE_HEADER_DATE_DAY;
-		sd_write(data_test,1);
-
-		data_test[0] = DATAFILE_HEADER_DATE_MONTH;
-		sd_write(data_test,1);
-
-		data_test[0] = DATAFILE_HEADER_DATE_YEAR;
-		sd_write(data_test,1);
-
 		sd_write(&unix_time,4);
 
 		sd_write(&daq_frequency,2);
+
+		//log_push(); //push a new sensor into the log API
+		//log_getid(uint8_t id); //get the description of current sensor pushed into the log API
+		//log_remove(uint8_t id); //remove the specified id from the log buffer
+		//log_start(uint32_t watchdog);
+		//log_stop();
 
 
 	/*SD FILE STOP*/
