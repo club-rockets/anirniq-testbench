@@ -30,7 +30,7 @@ typedef struct _DataBuffer {
 
 void init(DataBuffer *buffer);   // Initialisation du buffer circulaire
 void free(DataBuffer *buffer);   // Suppress all data in the buffer and reinit it
-uint8_t put(DataBuffer *buffer, DataBuffer_Element item); //Add data to the buffer
+uint8_t push(DataBuffer *buffer, SENSOR_STRUCT data); //Add data to the buffer
 DataBuffer_Element get(DataBuffer *buffer, uint8_t ptr); //Read head value
 uint8_t remain(DataBuffer *buffer); //Give remaning space
 uint8_t size(DataBuffer *buffer); //Give number of element in it

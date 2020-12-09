@@ -61,16 +61,3 @@ void p_stop(void){
 	adc_power(0);
 
 }
-
-uint8_t p_push(SENSOR_STRUCT *t_struct, DataBuffer *buffer){
-
-	DataBuffer_Element newData;
-
-	newData.node = XML_NODE;
-	newData.id = t_struct->id;
-
-	newData.adr = t_struct->data_raw;
-
-	return put(buffer, newData);
-
-}

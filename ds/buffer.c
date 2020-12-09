@@ -31,10 +31,16 @@ void free(DataBuffer *buffer){
 }
 
 //Add data to the bufferd
-uint8_t put(DataBuffer *buffer, DataBuffer_Element item){
+uint8_t push(DataBuffer *buffer, SENSOR_STRUCT data){
 
 	//Give remaning space
 	if(full(buffer) != DATA_BUFFER_FULL){
+
+		DataBuffer_Element item;
+
+		item.node = XML_NODE;
+		item.id = data->id;
+		item.adr = data->data_raw;
 
 		buffer->item[ptr].adr = item.adr; //add new item to buffer
 		buffer->ptr++; //increase the pointer

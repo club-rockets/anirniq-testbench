@@ -3,13 +3,12 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include "sensor.h"
 
 typedef struct _ACTUATOR_STRUCT{ // Structure of one sensor
 
-  uint8_t		id;
+  SENSOR_STRUCT	sensor;
   uint8_t 		lock;
-  uint32_t      *data_raw;
-  uint32_t		data;
 
 } ACTUATOR_STRUCT;
 
