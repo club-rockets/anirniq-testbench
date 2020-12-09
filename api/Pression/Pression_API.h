@@ -9,7 +9,7 @@
 #define PRESSION_API_H_
 
 #include <String.h>
-#include "dataBuffer.h"
+#include "buffer.h"
 #include "ADC_Driver.h"
 #include "uart1.h"
 #include "uart2.h"
@@ -30,10 +30,11 @@ typedef struct _API_PRESSURE_STRUCT{ // Structure of one thermocouple
 } API_PRESSURE_STRUCT;
 
 void p_API_init(void);
-void p_init(API_PRESSURE_STRUCT *t_struct, uint8_t id, uint16_t *adr);
+void p_init(ACTUATOR_STRUCT *t_struct, uint8_t id, uint16_t *adr);
 void p_start(uint16_t *data);
-void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port, uint8_t format);
+void p_send(ACTUATOR_STRUCT *t_struct, uint8_t port, uint8_t format);
+void p_convert(ACTUATOR_STRUCT *t_struct);
 void p_stop(void);
-uint8_t p_push(API_PRESSURE_STRUCT *t_struct, DataBuffer *buffer);
+uint8_t p_push(ACTUATOR_STRUCT *t_struct, DataBuffer *buffer);
 
 #endif

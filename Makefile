@@ -86,7 +86,9 @@ Middleware/ff14/source/ff.c \
 Middleware/ff14/source/ffsystem.c \
 Middleware/ff14/source/ffunicode.c \
 Middleware/ff14/source/diskio.c \
-ds/dataBuffer.c
+ds/actuator.c \
+ds/sensor.c \
+ds/buffer.c
 
 # ASM sources
 ASM_SOURCES =  \

@@ -6,10 +6,10 @@ void p_API_init(void){
 
 }
 
-void p_init(API_PRESSURE_STRUCT *t_struct, uint8_t id, uint16_t *adr){
+void p_init(SENSOR_STRUCT *t_struct, uint8_t id, uint16_t *adr){
 
 	t_struct->id = id;
-	t_struct->data = adr;
+	t_struct->data_raw = adr;
 
 }
 
@@ -21,14 +21,14 @@ void p_start(uint16_t *data){
 
 }
 
-void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port, uint8_t format){
+void p_send(SENSOR_STRUCT *t_struct, uint8_t port, uint8_t format){
 
 
 	if(!format){
 
 		char strdata[8];
 		char strid[8];
-		sprintf(strdata,"%d",*t_struct->data);
+		sprintf(strdata,"%d",*t_struct->data_raw);
 		sprintf(strid,"%d",t_struct->id);
 
 		if(!port){
@@ -50,22 +50,26 @@ void p_send(API_PRESSURE_STRUCT *t_struct, uint8_t port, uint8_t format){
 	}else{}
 }
 
+void p_convert(SENSOR_STRUCT *t_struct){
+
+	t_struct->data = (uint32_t)*(t_struct->data_raw);
+
+}
+
 void p_stop(void){
 
 	adc_power(0);
 
 }
 
-uint8_t p_push(API_PRESSURE_STRUCT *t_struct, DataBuffer *buffer){
+uint8_t p_push(SENSOR_STRUCT *t_struct, DataBuffer *buffer){
 
 	DataBuffer_Element newData;
 
 	newData.node = XML_NODE;
 	newData.id = t_struct->id;
 
-	newData.data.adr = t_struct->data;
-	newData.data.nb = 1;
-	newData.data.type = sizeof(*(t_struct->data));
+	newData.adr = t_struct->data_raw;
 
 	return put(buffer, newData);
 
