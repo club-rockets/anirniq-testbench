@@ -7,8 +7,8 @@
 typedef struct _SENSOR_STRUCT{ // Structure of one sensor
 
   uint8_t		id;
-  uint32_t      *data_raw;
-  uint32_t		data;
+  uint32_t  *data_raw;
+  uint32_t	data;
 
 } SENSOR_STRUCT;
 
